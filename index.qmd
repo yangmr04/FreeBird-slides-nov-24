@@ -15,10 +15,14 @@
 ## Motivation 
 
 Problems in computational surface modeling:  
-- No available tools
-- Tools are too slow
 
-![“notFinal.doc” by Jorge Cham, <https://www.phdcomics.com>](https://swcarpentry.github.io/git-novice/fig/phd101212s.png)
+   - No available tools
+   - Tools are not good
+   - Tools are too slow
+
+::: {style="text-align: center; margin-top: 1em"}
+[Journal of Open Source Software](https://joss.theoj.org/){preview-link="true" style="text-align: center"}
+:::
 
 ## What is version control
 

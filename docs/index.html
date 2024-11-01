@@ -410,16 +410,24 @@
 <h1>Overview</h1>
 <ol type="1">
 <li><p><strong>Introduction to <code>FreeBird.jl</code></strong><br>
-How it works, what it does, and why it’s important</p></li>
+Design, functionality, and extensibility</p></li>
 <li><p><strong>Introduction to Research Software Engineering (RSE)</strong><br>
-What is RSE, and why it’s important</p></li>
+What is RSE, and how does it fit in Chemistry</p></li>
 </ol>
 </section>
-<section id="what-is-version-control" class="slide level2 center">
-<h2>What is version control</h2>
-
-<img data-src="https://swcarpentry.github.io/git-novice/fig/phd101212s.png" class="r-stretch quarto-figure-center"><p class="caption">“notFinal.doc” by Jorge Cham, <a href="https://www.phdcomics.com" class="uri">https://www.phdcomics.com</a></p></section>
-<section id="what-is-version-control-1" class="slide level2 center scrollable">
+<section id="motivation" class="slide level2 center">
+<h2>Motivation</h2>
+<p>Problems in computational surface modeling:</p>
+<ul>
+<li>No available tools</li>
+<li>Tools are not good</li>
+<li>Tools are too slow</li>
+</ul>
+<div style="text-align: center; margin-top: 1em">
+<p><a href="https://joss.theoj.org/" data-preview-link="true" style="text-align: center">Journal of Open Source Software</a></p>
+</div>
+</section>
+<section id="what-is-version-control" class="slide level2 center scrollable">
 <h2>What is version control</h2>
 <p>Version control (also known as revision control, source control, and source code management) is the software engineering practice of controlling computer files and versions of files; primarily source code text files, but generally any type of file. <sup>1</sup></p>
 <div class="fragment">
@@ -469,15 +477,15 @@ What is RSE, and why it’s important</p></li>
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 97)">
 <title>A</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-97 604.78,-97 604.78,4 -4,4"></polygon>
-<g id="clust2" class="cluster">
-<title>cluster_backend</title>
-<polygon fill="none" stroke="black" points="427.28,-8 427.28,-85 600.78,-85 600.78,-8 427.28,-8"></polygon>
-<text text-anchor="middle" x="514.03" y="-68.4" font-family="Times,serif" font-size="14.00">The Internet (origin/remote)</text>
-</g>
 <g id="clust1" class="cluster">
 <title>cluster_frontend</title>
 <polygon fill="none" stroke="black" points="8,-8 8,-85 407.28,-85 407.28,-8 8,-8"></polygon>
 <text text-anchor="middle" x="207.64" y="-68.4" font-family="Times,serif" font-size="14.00">Your Laptop</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_backend</title>
+<polygon fill="none" stroke="black" points="427.28,-8 427.28,-85 600.78,-85 600.78,-8 427.28,-8"></polygon>
+<text text-anchor="middle" x="514.03" y="-68.4" font-family="Times,serif" font-size="14.00">The Internet (origin/remote)</text>
 </g>
 <!-- local files -->
 <g id="node1" class="node">
@@ -541,15 +549,15 @@ What is RSE, and why it’s important</p></li>
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 97)">
 <title>B</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-97 604.78,-97 604.78,4 -4,4"></polygon>
-<g id="clust2" class="cluster">
-<title>cluster_backend</title>
-<polygon fill="none" stroke="black" points="427.28,-8 427.28,-85 600.78,-85 600.78,-8 427.28,-8"></polygon>
-<text text-anchor="middle" x="514.03" y="-68.4" font-family="Times,serif" font-size="14.00">The Internet (origin/remote)</text>
-</g>
 <g id="clust1" class="cluster">
 <title>cluster_frontend</title>
 <polygon fill="none" stroke="black" points="8,-8 8,-85 407.28,-85 407.28,-8 8,-8"></polygon>
 <text text-anchor="middle" x="207.64" y="-68.4" font-family="Times,serif" font-size="14.00">Your Laptop</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_backend</title>
+<polygon fill="none" stroke="black" points="427.28,-8 427.28,-85 600.78,-85 600.78,-8 427.28,-8"></polygon>
+<text text-anchor="middle" x="514.03" y="-68.4" font-family="Times,serif" font-size="14.00">The Internet (origin/remote)</text>
 </g>
 <!-- local files -->
 <g id="node1" class="node">
