@@ -1,0 +1,276 @@
+---
+title: "Basic Version Control with `Git`"
+subtitle: "<https://wexlergroup.github.io/git-recite-slides/>"
+author: "Ray Yang"
+format: #revealjs
+  revealjs:
+    # logo: logo.png
+    # footer: ""
+    slide-number: true
+---
+
+## What is version control
+
+![“notFinal.doc” by Jorge Cham, <https://www.phdcomics.com>](https://swcarpentry.github.io/git-novice/fig/phd101212s.png)
+
+## What is version control
+
+Version control (also known as revision control, source control, and source code management) is the software engineering practice of controlling computer files and versions of files; primarily source code text files, but generally any type of file. ^[<https://en.wikipedia.org/wiki/Version_control>]
+
+. . .
+
+- it's a concept, and `Git` is a software
+- and [GitHub](https://github.com/) is a platform/host/server...
+
+## What is `Git`
+
+- it's a software
+- it's free and open source
+- it's the  *de facto* standard version control system but there are many more (both open and proprietary)
+- it's independent of network access or a central server
+
+
+## What is [GitHub](https://github.com/)?
+
+- it's a platform/host/server...
+- it's free but **NOT** open source
+- it's owned by Microsoft since 2018
+- there are many others, e.g., [Bitbucket](https://bitbucket.org/product), [GitLab](https://about.gitlab.com)
+
+## The components
+
+There are the local parts and the server part. Typically, you interact with all parts through the **command line interface (CLI)**, which contains a set of text-based instructions.
+
+Nowadays, there are **graphical user interfaces (GUIs)** available for your convenience. Many **integrated development environments (IDEs)** also have integrated git functionalities, either built-in ot via plug-ins.
+
+
+## The direction of version control: `pull`
+```{dot}
+digraph A {
+  rankdir=LR;
+  edge [ style=dashed ];
+
+  // node [ fontname="Handlee" ];
+  subgraph cluster_frontend {
+    label="Your Laptop";
+    "local files" -> "staging area" -> "local repo" [dir=back];
+  }
+      
+  subgraph cluster_backend {
+    
+    label="The Internet (origin/remote)";
+    "online repo";
+  }
+
+  "local repo" -> "online repo" [dir=back];
+  
+}
+```
+
+<span style="font-size:0.5em;">Repo: repository</span>
+
+## The direction of version control: `push`
+
+```{dot}
+digraph B {
+  rankdir=LR;
+  edge [ style=dashed ];
+
+  // node [ fontname="Handlee" ];
+  subgraph cluster_frontend {
+    label="Your Laptop";
+    "local files" ->"staging area" -> "local repo";
+  }
+      
+  subgraph cluster_backend {
+    
+    label="The Internet (origin/remote)";
+    "online repo";
+  }
+
+  "local repo" -> "online repo";
+  
+}
+```
+
+<span style="font-size:0.5em;">Repo: repository</span>
+
+## An example repo using version control
+
+- FreeBird: a Julia package developed by Wexler Group
+<https://github.com/wexlergroup/FreeBird.jl>
+
+## Quiz time!
+
+1. What is `wexlergroup/FreeBird.jl`? A server? A project? A software?
+2. Where is `wexlergroup/FreeBird.jl` hosted?
+3. When was the last change made?
+4. Are there any issues with `FreeBird`, or it is just simply the perfection😁?
+5. How many branches are there?
+
+
+## Useful resources
+
+- Atlassian Git Tutorials <https://www.atlassian.com/git/tutorials>
+- Software Carpentry, Version Control with Git <https://swcarpentry.github.io/git-novice/>
+- Git documentation  <https://git-scm.com/docs>
+
+# Commands
+
+## Cloning an existing repository
+
+- `git clone`: copy, or "clone" a repo from a server
+```zsh
+git clone https://github.com/your_github_username/your_repo
+```
+\  
+
+I recommend creating a new repo on GitHub then clone it, instead of initiating a repo locally then push. See [Creating a new repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) page on GitHub.
+
+## Setting up a repository
+
+- `git init`: tell git to set up version control
+
+```zsh
+cd /path/to/your/existing/code 
+git init
+```
+Or, when outside a directory, use
+```zsh
+git init <project directory>
+```
+
+<span style="font-size:0.5em;"> - Directory: a "folder" equivalent in CLI</span>
+
+## Some configurations
+
+- `git config`
+
+Setting up for *every* repository on your computer  
+```zsh
+git config --global user.name "Mona Lisa"
+git config --global user.email "your_email@example.com"
+```
+
+Setting up for *a single* repository on your computer  
+```zsh
+git config user.name "Mona Lisa"
+git config user.email "your_email@example.com"
+```
+
+
+## To update a local repo
+
+- `git pull`: you *pull* the updates from the server
+```zsh
+git pull
+Already up to date.
+```  
+
+
+Always try `pull` before making any changes to stay up-to-date with the origin, and avoid *merge conflicts*.
+
+## Inspecting a repository
+
+- `git status`: check the status of the current repo
+```zsh
+git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   docs/index.html
+        modified:   index.qmd
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+## Start tracking
+
+- `git add`: to stage the changes
+```zsh
+git add <file_name>
+```
+several options:
+```zsh
+git add -A    # stage all changes: new, modified and deleted files
+git add .     # stage new and modified files
+git add -u    # stage modified and deleted files
+```
+
+## To stage the changes
+- `git commit`: to commit the changes staged with `git add`
+```zsh
+git commit -m "some text for the commit message"
+[main d7cf2e6] some text for the commit message
+ 2 files changed, 18 insertions(+), 5 deletions(-)
+```
+
+
+## To upload with the server
+- `git push`: to `push` your changes to the `origin`
+```zsh
+git push
+
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 1002 bytes | 1002.00 KiB/s, done.
+Total 5 (delta 3), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To https://github.com/yangmr04/git-recite-slides.git
+   5786288..efbbf37  main -> main
+```
+
+## Full example
+
+```zsh
+git pull
+Already up to date.
+
+git add hello.py
+
+git status
+On branch main
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+   new file: hello.py
+
+git commit -m "added hello.py"
+[main 2342a93] added hello.py
+ 1 file changed, 1 insertion(+)
+
+git push
+```
+
+## Something unexpected: *merge conflict*
+Merge conflicts occur when competing changes are made to the same line of a file.^[[Resolving a merge conflict using the command line](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line)]
+It will block the `push` actions until the conflicts are resolved. A merge conflict looks like this:
+\  
+
+\  
+
+```zsh
+If you have questions, please
+<<<<<<< HEAD
+open an issue
+=======
+ask your question in IRC.
+>>>>>>> branch-a
+```
+## Other concepts not covered here
+
+- Pull requests
+- Branches
+- Forks
+
+## Take-home message
+- Version control is a powerful tool
+- It's a good practice for code development
+- It's essential for collaborative projects
+- It has great importance in scientific reproducibility
+
+Start using it, now!

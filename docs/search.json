@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html#what-is-version-control",
+    "href": "index.html#what-is-version-control",
+    "title": "Basic Version Control with Git",
+    "section": "What is version control",
+    "text": "What is version control\nVersion control (also known as revision control, source control, and source code management) is the software engineering practice of controlling computer files and versions of files; primarily source code text files, but generally any type of file. 1\n\n\nit’s a concept, and Git is a software\nand GitHub is a platform/host/server…\n\n\nhttps://en.wikipedia.org/wiki/Version_control"
+  },
+  {
+    "objectID": "index.html#what-is-git",
+    "href": "index.html#what-is-git",
+    "title": "Basic Version Control with Git",
+    "section": "What is Git",
+    "text": "What is Git\n\nit’s a software\nit’s free and open source\nit’s the de facto standard version control system but there are many more (both open and proprietary)\nit’s independent of network access or a central server"
+  },
+  {
+    "objectID": "index.html#what-is-github",
+    "href": "index.html#what-is-github",
+    "title": "Basic Version Control with Git",
+    "section": "What is GitHub?",
+    "text": "What is GitHub?\n\nit’s a platform/host/server…\nit’s free but NOT open source\nit’s owned by Microsoft since 2018\nthere are many others, e.g., Bitbucket, GitLab"
+  },
+  {
+    "objectID": "index.html#the-components",
+    "href": "index.html#the-components",
+    "title": "Basic Version Control with Git",
+    "section": "The components",
+    "text": "The components\nThere are the local part and the serve part\n\n\n\n\n\n\n\n\n\n\n\n\ncluster_frontend\n\nyour laptop\n\n\ncluster_backend\n\nthe internet\n\n\n\nlocal files\n\nlocal files\n\n\n\nlocal repo\n\nlocal repo\n\n\n\nlocal files-&gt;local repo\n\n\n\n\n\nonline repo\n\nonline repo\n\n\n\nlocal repo-&gt;online repo\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: This is a simple graphviz graph"
+  },
+  {
+    "objectID": "index.html#some-key-commands",
+    "href": "index.html#some-key-commands",
+    "title": "Basic Version Control with Git",
+    "section": "Some key commands",
+    "text": "Some key commands\n\ngit add: to add a local file for tracking\n\ngit add &lt;file_name&gt;"
+  }
+]
