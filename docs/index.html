@@ -11,8 +11,8 @@
   <meta name="generator" content="quarto-1.5.56">
 
   <meta name="author" content="Ray Yang">
-  <meta name="dcterms.date" content="2024-09-21">
-  <title>Basic Version Control with Git</title>
+  <meta name="dcterms.date" content="2024-11-01">
+  <title>Engineering a computational surface modeling toolbox in Julia</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -57,49 +57,52 @@
         -khtml-user-select: none; -moz-user-select: none;
         -ms-user-select: none; user-select: none;
         padding: 0 4px; width: 4em;
-        color: #aaaaaa;
       }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
     div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
+      { color: #383a42;  }
     @media screen {
     pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
     }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    code span { color: #383a42; } /* Normal */
+    code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+    code span.an { color: #50a14f; } /* Annotation */
+    code span.at { color: #a626a4; } /* Attribute */
+    code span.bn { color: #986801; } /* BaseN */
+    code span.bu { color: #a626a4; } /* BuiltIn */
+    code span.cf { color: #a626a4; } /* ControlFlow */
+    code span.ch { color: #50a14f; } /* Char */
+    code span.cn { color: #986801; } /* Constant */
+    code span.co { color: #a0a1a7; font-style: italic; } /* Comment */
+    code span.cv { color: #e45649; font-style: italic; } /* CommentVar */
+    code span.do { color: #e45649; } /* Documentation */
+    code span.dt { color: #a626a4; } /* DataType */
+    code span.dv { color: #986801; } /* DecVal */
+    code span.er { color: #f44747; text-decoration: underline; } /* Error */
+    code span.ex { color: #4078f2; font-weight: bold; } /* Extension */
+    code span.fl { color: #986801; } /* Float */
+    code span.fu { color: #4078f2; } /* Function */
+    code span.im { color: #50a14f; } /* Import */
+    code span.in { color: #c45b00; } /* Information */
+    code span.kw { color: #a626a4; } /* Keyword */
+    code span.op { color: #a626a4; } /* Operator */
+    code span.ot { color: #27ae60; } /* Other */
+    code span.pp { color: #a626a4; } /* Preprocessor */
+    code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
+    code span.sc { color: #0184bc; } /* SpecialChar */
+    code span.ss { color: #da4453; } /* SpecialString */
+    code span.st { color: #50a14f; } /* String */
+    code span.va { color: #e45649; } /* Variable */
+    code span.vs { color: #da4453; } /* VerbatimString */
+    code span.wa { color: #da4453; } /* Warning */
   </style>
   <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="css/custom.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
@@ -310,6 +313,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -391,25 +395,28 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Basic Version Control with <code>Git</code></h1>
-  <p class="subtitle"><a href="https://wexlergroup.github.io/git-recite-slides/" class="uri">https://wexlergroup.github.io/git-recite-slides/</a></p>
-
-<div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
-Ray Yang 
-</div>
-</div>
-</div>
-
-  <p class="date">2024-09-21</p>
+<section id="title-slide" background-color="white" data-background-color="white" data-background-iframe="https://emilhvitfeldt.github.io/quarto-iframe-examples/colored-particles/index.html" data-background-size="contain" class="quarto-title-block center">
+  <div class="quarto-title-container" style="background-color: rgba(245,245,245, 0.875); border-radius: 10px; text-align:center; padding: 0px; padding-left: 1.5em; padding-right: 1.5em; margin-left: auto; margin-right: auto; padding-top: 0.2em; padding-bottom: 0.2em; line-height: 1.5em!important;">
+    <!-- max-width: min-content; min-width: max-content;  -->
+    <h2 class="title">Engineering a computational surface modeling toolbox in Julia</h2>
+            <p class="author">Ray Yang</p>
+            <p class="institute">Washington University in St.&nbsp;Louis</p>
+            <p class="date">2024-11-01</p>
+            <p class="location">@ PChem Group Meeting</p>
+          </div>
 </section>
-<section id="what-is-version-control" class="slide level2">
+<section>
+<section id="overview" class="title-slide slide level1 center scrollable">
+<h1>Overview</h1>
+<ol type="1">
+<li><a href="#/sec-git">Background: <code>{MCMC,HMC}</code></a></li>
+</ol>
+</section>
+<section id="what-is-version-control" class="slide level2 center">
 <h2>What is version control</h2>
 
 <img data-src="https://swcarpentry.github.io/git-novice/fig/phd101212s.png" class="r-stretch quarto-figure-center"><p class="caption">“notFinal.doc” by Jorge Cham, <a href="https://www.phdcomics.com" class="uri">https://www.phdcomics.com</a></p></section>
-<section id="what-is-version-control-1" class="slide level2">
+<section id="what-is-version-control-1" class="slide level2 center scrollable">
 <h2>What is version control</h2>
 <p>Version control (also known as revision control, source control, and source code management) is the software engineering practice of controlling computer files and versions of files; primarily source code text files, but generally any type of file. <sup>1</sup></p>
 <div class="fragment">
@@ -418,8 +425,14 @@ Ray Yang
 <li>and <a href="https://github.com/">GitHub</a> is a platform/host/server…</li>
 </ul>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Version_control" class="uri">https://en.wikipedia.org/wiki/Version_control</a></p></li></ol></aside></section>
-<section id="what-is-git" class="slide level2">
+
+<aside><div>
+<hr>
+<ol>
+<li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Version_control" class="uri">https://en.wikipedia.org/wiki/Version_control</a><a href="#/fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</div><ol class="aside-footnotes"></ol></aside></section>
+<section id="sec-git" class="slide level2 centeredslide center">
 <h2>What is <code>Git</code></h2>
 <ul>
 <li>it’s a software</li>
@@ -428,7 +441,7 @@ Ray Yang
 <li>it’s independent of network access or a central server</li>
 </ul>
 </section>
-<section id="what-is-github" class="slide level2">
+<section id="what-is-github" class="slide level2 center">
 <h2>What is <a href="https://github.com/">GitHub</a>?</h2>
 <ul>
 <li>it’s a platform/host/server…</li>
@@ -437,14 +450,14 @@ Ray Yang
 <li>there are many others, e.g., <a href="https://bitbucket.org/product">Bitbucket</a>, <a href="https://about.gitlab.com">GitLab</a></li>
 </ul>
 </section>
-<section id="the-components" class="slide level2">
+<section id="the-components" class="slide level2 center">
 <h2>The components</h2>
 <p>There are the local parts and the server part. Typically, you interact with all parts through the <strong>command line interface (CLI)</strong>, which contains a set of text-based instructions.</p>
 <p>Nowadays, there are <strong>graphical user interfaces (GUIs)</strong> available for your convenience. Many <strong>integrated development environments (IDEs)</strong> also have integrated git functionalities, either built-in ot via plug-ins.</p>
 </section>
-<section id="the-direction-of-version-control-pull" class="slide level2">
+<section id="the-direction-of-version-control-pull" class="slide level2 center">
 <h2>The direction of version control: <code>pull</code></h2>
-<div class="cell" data-layout-align="default">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div>
 <p></p><figure class=""><p></p>
@@ -453,15 +466,15 @@ Ray Yang
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 97)">
 <title>A</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-97 604.78,-97 604.78,4 -4,4"></polygon>
-<g id="clust1" class="cluster">
-<title>cluster_frontend</title>
-<polygon fill="none" stroke="black" points="8,-8 8,-85 407.28,-85 407.28,-8 8,-8"></polygon>
-<text text-anchor="middle" x="207.64" y="-68.4" font-family="Times,serif" font-size="14.00">Your Laptop</text>
-</g>
 <g id="clust2" class="cluster">
 <title>cluster_backend</title>
 <polygon fill="none" stroke="black" points="427.28,-8 427.28,-85 600.78,-85 600.78,-8 427.28,-8"></polygon>
 <text text-anchor="middle" x="514.03" y="-68.4" font-family="Times,serif" font-size="14.00">The Internet (origin/remote)</text>
+</g>
+<g id="clust1" class="cluster">
+<title>cluster_frontend</title>
+<polygon fill="none" stroke="black" points="8,-8 8,-85 407.28,-85 407.28,-8 8,-8"></polygon>
+<text text-anchor="middle" x="207.64" y="-68.4" font-family="Times,serif" font-size="14.00">Your Laptop</text>
 </g>
 <!-- local files -->
 <g id="node1" class="node">
@@ -514,9 +527,9 @@ Ray Yang
 </div>
 <p><span style="font-size:0.5em;">Repo: repository</span></p>
 </section>
-<section id="the-direction-of-version-control-push" class="slide level2">
+<section id="the-direction-of-version-control-push" class="slide level2 center">
 <h2>The direction of version control: <code>push</code></h2>
-<div class="cell" data-layout-align="default">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div>
 <p></p><figure class=""><p></p>
@@ -586,13 +599,13 @@ Ray Yang
 </div>
 <p><span style="font-size:0.5em;">Repo: repository</span></p>
 </section>
-<section id="an-example-repo-using-version-control" class="slide level2">
+<section id="an-example-repo-using-version-control" class="slide level2 center">
 <h2>An example repo using version control</h2>
 <ul>
 <li>FreeBird: a Julia package developed by Wexler Group <a href="https://github.com/wexlergroup/FreeBird.jl" class="uri">https://github.com/wexlergroup/FreeBird.jl</a></li>
 </ul>
 </section>
-<section id="quiz-time" class="slide level2">
+<section id="quiz-time" class="slide level2 center scrollable">
 <h2>Quiz time!</h2>
 <ol type="1">
 <li>What is <code>wexlergroup/FreeBird.jl</code>? A server? A project? A software?</li>
@@ -602,20 +615,20 @@ Ray Yang
 <li>How many branches are there?</li>
 </ol>
 </section>
-<section id="useful-resources" class="slide level2">
+<section id="useful-resources" class="slide level2 center">
 <h2>Useful resources</h2>
 <ul>
 <li>Atlassian Git Tutorials <a href="https://www.atlassian.com/git/tutorials" class="uri">https://www.atlassian.com/git/tutorials</a></li>
 <li>Software Carpentry, Version Control with Git <a href="https://swcarpentry.github.io/git-novice/" class="uri">https://swcarpentry.github.io/git-novice/</a></li>
 <li>Git documentation <a href="https://git-scm.com/docs" class="uri">https://git-scm.com/docs</a></li>
 </ul>
-</section>
+</section></section>
 <section>
 <section id="commands" class="title-slide slide level1 center">
 <h1>Commands</h1>
 
 </section>
-<section id="cloning-an-existing-repository" class="slide level2">
+<section id="cloning-an-existing-repository" class="slide level2 center">
 <h2>Cloning an existing repository</h2>
 <ul>
 <li><code>git clone</code>: copy, or “clone” a repo from a server</li>
@@ -624,7 +637,7 @@ Ray Yang
 <p>&nbsp;</p>
 <p>I recommend creating a new repo on GitHub then clone it, instead of initiating a repo locally then push. See <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository">Creating a new repository</a> page on GitHub.</p>
 </section>
-<section id="setting-up-a-repository" class="slide level2">
+<section id="setting-up-a-repository" class="slide level2 center">
 <h2>Setting up a repository</h2>
 <ul>
 <li><code>git init</code>: tell git to set up version control</li>
@@ -635,7 +648,7 @@ Ray Yang
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><a href=""></a><span class="fu">git</span> init <span class="op">&lt;</span>project directory<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><span style="font-size:0.5em;"> - Directory: a “folder” equivalent in CLI</span></p>
 </section>
-<section id="some-configurations" class="slide level2">
+<section id="some-configurations" class="slide level2 center">
 <h2>Some configurations</h2>
 <ul>
 <li><code>git config</code></li>
@@ -647,7 +660,7 @@ Ray Yang
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb5-1"><a href=""></a><span class="fu">git</span> config user.name <span class="st">"Mona Lisa"</span></span>
 <span id="cb5-2"><a href=""></a><span class="fu">git</span> config user.email <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="to-update-a-local-repo" class="slide level2">
+<section id="to-update-a-local-repo" class="slide level2 center">
 <h2>To update a local repo</h2>
 <ul>
 <li><code>git pull</code>: you <em>pull</em> the updates from the server</li>
@@ -656,7 +669,7 @@ Ray Yang
 <span id="cb6-2"><a href=""></a><span class="ex">Already</span> up to date.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Always try <code>pull</code> before making any changes to stay up-to-date with the origin, and avoid <em>merge conflicts</em>.</p>
 </section>
-<section id="inspecting-a-repository" class="slide level2">
+<section id="inspecting-a-repository" class="slide level2 center">
 <h2>Inspecting a repository</h2>
 <ul>
 <li><code>git status</code>: check the status of the current repo</li>
@@ -673,7 +686,7 @@ Ray Yang
 <span id="cb7-10"><a href=""></a></span>
 <span id="cb7-11"><a href=""></a><span class="ex">no</span> changes added to commit <span class="op">(us</span>e <span class="st">"git add"</span> and/or <span class="st">"git commit -a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="start-tracking" class="slide level2">
+<section id="start-tracking" class="slide level2 center">
 <h2>Start tracking</h2>
 <ul>
 <li><code>git add</code>: to stage the changes</li>
@@ -684,7 +697,7 @@ Ray Yang
 <span id="cb9-2"><a href=""></a><span class="fu">git</span> add .     <span class="co"># stage new and modified files</span></span>
 <span id="cb9-3"><a href=""></a><span class="fu">git</span> add <span class="at">-u</span>    <span class="co"># stage modified and deleted files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="to-stage-the-changes" class="slide level2">
+<section id="to-stage-the-changes" class="slide level2 center">
 <h2>To stage the changes</h2>
 <ul>
 <li><code>git commit</code>: to commit the changes staged with <code>git add</code></li>
@@ -693,7 +706,7 @@ Ray Yang
 <span id="cb10-2"><a href=""></a><span class="ex">[main</span> d7cf2e6] some text for the commit message</span>
 <span id="cb10-3"><a href=""></a> <span class="ex">2</span> files changed, 18 insertions<span class="pp">(</span><span class="ss">+</span><span class="pp">)</span>, 5 deletions<span class="op">(-)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="to-upload-with-the-server" class="slide level2">
+<section id="to-upload-with-the-server" class="slide level2 center">
 <h2>To upload with the server</h2>
 <ul>
 <li><code>git push</code>: to <code>push</code> your changes to the <code>origin</code></li>
@@ -710,7 +723,7 @@ Ray Yang
 <span id="cb11-10"><a href=""></a><span class="ex">To</span> https://github.com/yangmr04/git-recite-slides.git</span>
 <span id="cb11-11"><a href=""></a>   <span class="ex">5786288..efbbf37</span>  main <span class="at">-</span><span class="op">&gt;</span> main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="full-example" class="slide level2">
+<section id="full-example" class="slide level2 center">
 <h2>Full example</h2>
 <div class="sourceCode" id="cb12"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb12-1"><a href=""></a><span class="fu">git</span> pull</span>
 <span id="cb12-2"><a href=""></a><span class="ex">Already</span> up to date.</span>
@@ -729,7 +742,7 @@ Ray Yang
 <span id="cb12-15"><a href=""></a></span>
 <span id="cb12-16"><a href=""></a><span class="fu">git</span> push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="something-unexpected-merge-conflict" class="slide level2">
+<section id="something-unexpected-merge-conflict" class="slide level2 center scrollable">
 <h2>Something unexpected: <em>merge conflict</em></h2>
 <p>Merge conflicts occur when competing changes are made to the same line of a file.<sup>1</sup> It will block the <code>push</code> actions until the conflicts are resolved. A merge conflict looks like this: &nbsp;</p>
 <p>&nbsp;</p>
@@ -739,8 +752,14 @@ Ray Yang
 <span id="cb13-4"><a href=""></a><span class="ex">=======</span></span>
 <span id="cb13-5"><a href=""></a><span class="ex">ask</span> your question in IRC.</span>
 <span id="cb13-6"><a href=""></a><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> branch-a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a></p></li></ol></aside></section>
-<section id="other-concepts-not-covered-here" class="slide level2">
+
+<aside><div>
+<hr>
+<ol start="2">
+<li id="fn2"><p><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a><a href="#/fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</div><ol class="aside-footnotes"></ol></aside></section>
+<section id="other-concepts-not-covered-here" class="slide level2 center">
 <h2>Other concepts not covered here</h2>
 <ul>
 <li>Pull requests</li>
@@ -748,7 +767,7 @@ Ray Yang
 <li>Forks</li>
 </ul>
 </section>
-<section id="take-home-message" class="slide level2">
+<section id="take-home-message" class="slide level2 center">
 <h2>Take-home message</h2>
 <ul>
 <li>Version control is a powerful tool</li>
@@ -758,12 +777,12 @@ Ray Yang
 </ul>
 <p>Start using it, now!</p>
 <div class="quarto-auto-generated-content">
+<p><img src="WashU.png" class="slide-logo"></p>
 <div class="footer footer-default">
 
 </div>
 </div>
 </section></section>
-
     </div>
   </div>
 
@@ -774,13 +793,13 @@ Ray Yang
   <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
   <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
   <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
   <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
   <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="index_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -788,13 +807,14 @@ Ray Yang
       // Full list of configuration options available at:
       // https://revealjs.com/config/
       Reveal.initialize({
-'controlsAuto': true,
+'controlsAuto': false,
 'previewLinksAuto': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true,"chalkboard":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -802,7 +822,7 @@ Ray Yang
 
         // Help the user learn the controls by providing hints, for example by
         // bouncing the down arrow when they first encounter a vertical slide
-        controlsTutorial: false,
+        controlsTutorial: true,
 
         // Determines where controls appear, "edges" or "bottom-right"
         controlsLayout: 'edges',
@@ -815,7 +835,7 @@ Ray Yang
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: 'c',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -831,7 +851,7 @@ Ray Yang
         respondToHashChanges: true,
 
         // Push each slide change to the browser history
-        history: true,
+        history: false,
 
         // Enable keyboard shortcuts for navigation
         keyboard: true,
@@ -844,7 +864,7 @@ Ray Yang
         disableLayout: false,
 
         // Vertical centering of slides
-        center: false,
+        center: true,
 
         // Enables touch navigation on devices with touch input
         touch: true,
@@ -877,7 +897,7 @@ Ray Yang
         help: true,
 
         // Flags if it should be possible to pause the presentation (blackout)
-        pause: true,
+        pause: false,
 
         // Flags if speaker notes should be visible to all viewers
         showNotes: false,
@@ -917,7 +937,7 @@ Ray Yang
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -947,27 +967,9 @@ Ray Yang
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
 
-        math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
-
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
 
-          RevealMath,
           RevealNotes,
           RevealSearch,
           RevealZoom

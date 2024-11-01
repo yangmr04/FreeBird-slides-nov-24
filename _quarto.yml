@@ -120,4 +120,18 @@ author:
 # highlight-style:
 #   dark: dracula
 #   light: dracula-light
-
+format:
+  html:
+    # reference-location: section
+    # toc-location: right
+    page-layout: full
+    # grid:
+    #   body-width: 800px
+  # revealjs:
+    # slides-url: https://samforeman.me/talks/llms-at-scale/slides.html
+    # template-partials:
+    #   - ./title-slide.html
+      # - ./title-fancy/title-slide.html
+      # - ./title_slide_template.html
+      # - ../../title-slide.html
+    
