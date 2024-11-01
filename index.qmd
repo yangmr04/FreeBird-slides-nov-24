@@ -1,7 +1,7 @@
 {{< include _setup.qmd >}}
 
 
-# Overview
+## Overview
 
 
 1. **Introduction to `FreeBird.jl`**  
@@ -23,6 +23,67 @@ Problems in computational surface modeling:
 ::: {style="text-align: center; margin-top: 1em"}
 [Journal of Open Source Software](https://joss.theoj.org/){preview-link="true" style="text-align: center"}
 :::
+
+## Executable Code
+
+```{julia}
+#| echo: true
+
+function hello(name)
+    println("Hello, $(name)!")
+end
+
+hello("hi")
+```
+
+::: footer
+Learn more: [Executable Code](https://quarto.org/docs/presentations/revealjs/#executable-code)
+:::
+
+## LaTeX Equations
+
+[MathJax](https://www.mathjax.org/) rendering of equations to HTML
+
+::: columns
+::: {.column width="40%"}
+``` tex
+\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}
+
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+```
+:::
+
+::: {.column width="60%"}
+```{=tex}
+\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}
+```
+```{=tex}
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+```
+:::
+:::
+
+::: footer
+Learn more: [LaTeX Equations](https://quarto.org/docs/authoring/markdown-basics.html#equations)
+:::
+
+
 
 ## What is version control
 

@@ -5,8 +5,10 @@ author: "Ray M. Yang"
 # date: "Nov 1, 2024"
 institute: "Washington University in St. Louis"
 location: "PChem Group Meeting"
+jupyter: julia-1.11
 format: #revealjs
   revealjs:
+    # theme: dark
     slides-url: https://samforeman.me/talks/llms-at-scale/slides.html
     template-partials:
       - ./title-slide.html 
@@ -42,7 +44,7 @@ format: #revealjs
     logo: WashU.png
     history: false
     highlight-style: "atom-one"
-    center: true
+    # center: true
     default-image-extension: svg
     code-overflow: scroll
     html-math-method: katex

@@ -98,6 +98,22 @@
   </style>
   <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
   <link rel="stylesheet" href="css/custom.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -405,9 +421,8 @@
             <p style="font-size:0.8em;" class="location">@ PChem Group Meeting</p>
           </div>
 </section>
-<section>
-<section id="overview" class="title-slide slide level1 center scrollable">
-<h1>Overview</h1>
+<section id="overview" class="slide level2 scrollable">
+<h2>Overview</h2>
 <ol type="1">
 <li><p><strong>Introduction to <code>FreeBird.jl</code></strong><br>
 Design, functionality, and extensibility</p></li>
@@ -415,7 +430,7 @@ Design, functionality, and extensibility</p></li>
 What is RSE, and how does it fit in Chemistry</p></li>
 </ol>
 </section>
-<section id="motivation" class="slide level2 center">
+<section id="motivation" class="slide level2">
 <h2>Motivation</h2>
 <p>Problems in computational surface modeling:</p>
 <ul>
@@ -427,7 +442,55 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <p><a href="https://joss.theoj.org/" data-preview-link="true" style="text-align: center">Journal of Open Source Software</a></p>
 </div>
 </section>
-<section id="what-is-version-control" class="slide level2 center scrollable">
+<section id="executable-code" class="slide level2">
+<h2>Executable Code</h2>
+<div id="4b66b43d" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href=""></a><span class="kw">function</span> <span class="fu">hello</span>(name)</span>
+<span id="cb1-2"><a href=""></a>    <span class="fu">println</span>(<span class="st">"Hello, </span><span class="sc">$</span>(name)<span class="st">!"</span>)</span>
+<span id="cb1-3"><a href=""></a><span class="kw">end</span></span>
+<span id="cb1-4"><a href=""></a></span>
+<span id="cb1-5"><a href=""></a><span class="fu">hello</span>(<span class="st">"hi"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, hi!</code></pre>
+</div>
+</div>
+<div class="footer">
+<p>Learn more: <a href="https://quarto.org/docs/presentations/revealjs/#executable-code">Executable Code</a></p>
+</div>
+</section>
+<section id="latex-equations" class="slide level2">
+<h2>LaTeX Equations</h2>
+<p><a href="https://www.mathjax.org/">MathJax</a> rendering of equations to HTML</p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource tex number-lines code-with-copy"><code class="sourceCode latex"><span id="cb3-1"><a href=""></a><span class="kw">\begin</span>{<span class="ex">gather*</span>}</span>
+<span id="cb3-2"><a href=""></a><span class="ss">a_1=b_1+c_1</span><span class="sc">\\</span></span>
+<span id="cb3-3"><a href=""></a><span class="ss">a_2=b_2+c_2-d_2+e_2</span></span>
+<span id="cb3-4"><a href=""></a><span class="kw">\end</span>{<span class="ex">gather*</span>}</span>
+<span id="cb3-5"><a href=""></a></span>
+<span id="cb3-6"><a href=""></a><span class="kw">\begin</span>{<span class="ex">align</span>}</span>
+<span id="cb3-7"><a href=""></a><span class="ss">a_{11}&amp; =b_{11}&amp;</span></span>
+<span id="cb3-8"><a href=""></a><span class="ss">  a_{12}&amp; =b_{12}</span><span class="sc">\\</span></span>
+<span id="cb3-9"><a href=""></a><span class="ss">a_{21}&amp; =b_{21}&amp;</span></span>
+<span id="cb3-10"><a href=""></a><span class="ss">  a_{22}&amp; =b_{22}+c_{22}</span></span>
+<span id="cb3-11"><a href=""></a><span class="kw">\end</span>{<span class="ex">align</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:60%;">
+<span class="math display">\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}</span>
+<span class="math display">\begin{align}
+a_{11}&amp; =b_{11}&amp;
+  a_{12}&amp; =b_{12}\\
+a_{21}&amp; =b_{21}&amp;
+  a_{22}&amp; =b_{22}+c_{22}
+\end{align}</span>
+</div></div>
+<div class="footer">
+<p>Learn more: <a href="https://quarto.org/docs/authoring/markdown-basics.html#equations">LaTeX Equations</a></p>
+</div>
+</section>
+<section id="what-is-version-control" class="slide level2 scrollable">
 <h2>What is version control</h2>
 <p>Version control (also known as revision control, source control, and source code management) is the software engineering practice of controlling computer files and versions of files; primarily source code text files, but generally any type of file. <sup>1</sup></p>
 <div class="fragment">
@@ -443,7 +506,7 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Version_control" class="uri">https://en.wikipedia.org/wiki/Version_control</a><a href="#/fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </div><ol class="aside-footnotes"></ol></aside></section>
-<section id="sec-git" class="slide level2 centeredslide center">
+<section id="sec-git" class="slide level2 centeredslide">
 <h2>What is <code>Git</code></h2>
 <ul>
 <li>it’s a software</li>
@@ -452,7 +515,7 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <li>it’s independent of network access or a central server</li>
 </ul>
 </section>
-<section id="what-is-github" class="slide level2 center">
+<section id="what-is-github" class="slide level2">
 <h2>What is <a href="https://github.com/">GitHub</a>?</h2>
 <ul>
 <li>it’s a platform/host/server…</li>
@@ -461,12 +524,12 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <li>there are many others, e.g., <a href="https://bitbucket.org/product">Bitbucket</a>, <a href="https://about.gitlab.com">GitLab</a></li>
 </ul>
 </section>
-<section id="the-components" class="slide level2 center">
+<section id="the-components" class="slide level2">
 <h2>The components</h2>
 <p>There are the local parts and the server part. Typically, you interact with all parts through the <strong>command line interface (CLI)</strong>, which contains a set of text-based instructions.</p>
 <p>Nowadays, there are <strong>graphical user interfaces (GUIs)</strong> available for your convenience. Many <strong>integrated development environments (IDEs)</strong> also have integrated git functionalities, either built-in ot via plug-ins.</p>
 </section>
-<section id="the-direction-of-version-control-pull" class="slide level2 center">
+<section id="the-direction-of-version-control-pull" class="slide level2">
 <h2>The direction of version control: <code>pull</code></h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -477,15 +540,15 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 97)">
 <title>A</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-97 604.78,-97 604.78,4 -4,4"></polygon>
-<g id="clust1" class="cluster">
-<title>cluster_frontend</title>
-<polygon fill="none" stroke="black" points="8,-8 8,-85 407.28,-85 407.28,-8 8,-8"></polygon>
-<text text-anchor="middle" x="207.64" y="-68.4" font-family="Times,serif" font-size="14.00">Your Laptop</text>
-</g>
 <g id="clust2" class="cluster">
 <title>cluster_backend</title>
 <polygon fill="none" stroke="black" points="427.28,-8 427.28,-85 600.78,-85 600.78,-8 427.28,-8"></polygon>
 <text text-anchor="middle" x="514.03" y="-68.4" font-family="Times,serif" font-size="14.00">The Internet (origin/remote)</text>
+</g>
+<g id="clust1" class="cluster">
+<title>cluster_frontend</title>
+<polygon fill="none" stroke="black" points="8,-8 8,-85 407.28,-85 407.28,-8 8,-8"></polygon>
+<text text-anchor="middle" x="207.64" y="-68.4" font-family="Times,serif" font-size="14.00">Your Laptop</text>
 </g>
 <!-- local files -->
 <g id="node1" class="node">
@@ -538,7 +601,7 @@ What is RSE, and how does it fit in Chemistry</p></li>
 </div>
 <p><span style="font-size:0.5em;">Repo: repository</span></p>
 </section>
-<section id="the-direction-of-version-control-push" class="slide level2 center">
+<section id="the-direction-of-version-control-push" class="slide level2">
 <h2>The direction of version control: <code>push</code></h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -610,13 +673,13 @@ What is RSE, and how does it fit in Chemistry</p></li>
 </div>
 <p><span style="font-size:0.5em;">Repo: repository</span></p>
 </section>
-<section id="an-example-repo-using-version-control" class="slide level2 center">
+<section id="an-example-repo-using-version-control" class="slide level2">
 <h2>An example repo using version control</h2>
 <ul>
 <li>FreeBird: a Julia package developed by Wexler Group <a href="https://github.com/wexlergroup/FreeBird.jl" class="uri">https://github.com/wexlergroup/FreeBird.jl</a></li>
 </ul>
 </section>
-<section id="quiz-time" class="slide level2 center scrollable">
+<section id="quiz-time" class="slide level2 scrollable">
 <h2>Quiz time!</h2>
 <ol type="1">
 <li>What is <code>wexlergroup/FreeBird.jl</code>? A server? A project? A software?</li>
@@ -626,143 +689,143 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <li>How many branches are there?</li>
 </ol>
 </section>
-<section id="useful-resources" class="slide level2 center">
+<section id="useful-resources" class="slide level2">
 <h2>Useful resources</h2>
 <ul>
 <li>Atlassian Git Tutorials <a href="https://www.atlassian.com/git/tutorials" class="uri">https://www.atlassian.com/git/tutorials</a></li>
 <li>Software Carpentry, Version Control with Git <a href="https://swcarpentry.github.io/git-novice/" class="uri">https://swcarpentry.github.io/git-novice/</a></li>
 <li>Git documentation <a href="https://git-scm.com/docs" class="uri">https://git-scm.com/docs</a></li>
 </ul>
-</section></section>
+</section>
 <section>
 <section id="commands" class="title-slide slide level1 center">
 <h1>Commands</h1>
 
 </section>
-<section id="cloning-an-existing-repository" class="slide level2 center">
+<section id="cloning-an-existing-repository" class="slide level2">
 <h2>Cloning an existing repository</h2>
 <ul>
 <li><code>git clone</code>: copy, or “clone” a repo from a server</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb1-1"><a href=""></a><span class="fu">git</span> clone https://github.com/your_github_username/your_repo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><a href=""></a><span class="fu">git</span> clone https://github.com/your_github_username/your_repo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>&nbsp;</p>
 <p>I recommend creating a new repo on GitHub then clone it, instead of initiating a repo locally then push. See <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository">Creating a new repository</a> page on GitHub.</p>
 </section>
-<section id="setting-up-a-repository" class="slide level2 center">
+<section id="setting-up-a-repository" class="slide level2">
 <h2>Setting up a repository</h2>
 <ul>
 <li><code>git init</code>: tell git to set up version control</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb2-1"><a href=""></a><span class="bu">cd</span> /path/to/your/existing/code </span>
-<span id="cb2-2"><a href=""></a><span class="fu">git</span> init</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb5-1"><a href=""></a><span class="bu">cd</span> /path/to/your/existing/code </span>
+<span id="cb5-2"><a href=""></a><span class="fu">git</span> init</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Or, when outside a directory, use</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb3-1"><a href=""></a><span class="fu">git</span> init <span class="op">&lt;</span>project directory<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb6-1"><a href=""></a><span class="fu">git</span> init <span class="op">&lt;</span>project directory<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><span style="font-size:0.5em;"> - Directory: a “folder” equivalent in CLI</span></p>
 </section>
-<section id="some-configurations" class="slide level2 center">
+<section id="some-configurations" class="slide level2">
 <h2>Some configurations</h2>
 <ul>
 <li><code>git config</code></li>
 </ul>
 <p>Setting up for <em>every</em> repository on your computer</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><a href=""></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"Mona Lisa"</span></span>
-<span id="cb4-2"><a href=""></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb7-1"><a href=""></a><span class="fu">git</span> config <span class="at">--global</span> user.name <span class="st">"Mona Lisa"</span></span>
+<span id="cb7-2"><a href=""></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Setting up for <em>a single</em> repository on your computer</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb5-1"><a href=""></a><span class="fu">git</span> config user.name <span class="st">"Mona Lisa"</span></span>
-<span id="cb5-2"><a href=""></a><span class="fu">git</span> config user.email <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb8-1"><a href=""></a><span class="fu">git</span> config user.name <span class="st">"Mona Lisa"</span></span>
+<span id="cb8-2"><a href=""></a><span class="fu">git</span> config user.email <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="to-update-a-local-repo" class="slide level2 center">
+<section id="to-update-a-local-repo" class="slide level2">
 <h2>To update a local repo</h2>
 <ul>
 <li><code>git pull</code>: you <em>pull</em> the updates from the server</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb6-1"><a href=""></a><span class="fu">git</span> pull</span>
-<span id="cb6-2"><a href=""></a><span class="ex">Already</span> up to date.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb9-1"><a href=""></a><span class="fu">git</span> pull</span>
+<span id="cb9-2"><a href=""></a><span class="ex">Already</span> up to date.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Always try <code>pull</code> before making any changes to stay up-to-date with the origin, and avoid <em>merge conflicts</em>.</p>
 </section>
-<section id="inspecting-a-repository" class="slide level2 center">
+<section id="inspecting-a-repository" class="slide level2">
 <h2>Inspecting a repository</h2>
 <ul>
 <li><code>git status</code>: check the status of the current repo</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb7-1"><a href=""></a><span class="fu">git</span> status</span>
-<span id="cb7-2"><a href=""></a><span class="ex">On</span> branch main</span>
-<span id="cb7-3"><a href=""></a><span class="ex">Your</span> branch is up to date with <span class="st">'origin/main'</span>.</span>
-<span id="cb7-4"><a href=""></a></span>
-<span id="cb7-5"><a href=""></a><span class="ex">Changes</span> not staged for commit:</span>
-<span id="cb7-6"><a href=""></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git add &lt;file&gt;..."</span> to update what will be committed<span class="kw">)</span></span>
-<span id="cb7-7"><a href=""></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git restore &lt;file&gt;..."</span> to discard changes in working directory<span class="kw">)</span></span>
-<span id="cb7-8"><a href=""></a>        <span class="ex">modified:</span>   docs/index.html</span>
-<span id="cb7-9"><a href=""></a>        <span class="ex">modified:</span>   index.qmd</span>
-<span id="cb7-10"><a href=""></a></span>
-<span id="cb7-11"><a href=""></a><span class="ex">no</span> changes added to commit <span class="op">(us</span>e <span class="st">"git add"</span> and/or <span class="st">"git commit -a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb10-1"><a href=""></a><span class="fu">git</span> status</span>
+<span id="cb10-2"><a href=""></a><span class="ex">On</span> branch main</span>
+<span id="cb10-3"><a href=""></a><span class="ex">Your</span> branch is up to date with <span class="st">'origin/main'</span>.</span>
+<span id="cb10-4"><a href=""></a></span>
+<span id="cb10-5"><a href=""></a><span class="ex">Changes</span> not staged for commit:</span>
+<span id="cb10-6"><a href=""></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git add &lt;file&gt;..."</span> to update what will be committed<span class="kw">)</span></span>
+<span id="cb10-7"><a href=""></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git restore &lt;file&gt;..."</span> to discard changes in working directory<span class="kw">)</span></span>
+<span id="cb10-8"><a href=""></a>        <span class="ex">modified:</span>   docs/index.html</span>
+<span id="cb10-9"><a href=""></a>        <span class="ex">modified:</span>   index.qmd</span>
+<span id="cb10-10"><a href=""></a></span>
+<span id="cb10-11"><a href=""></a><span class="ex">no</span> changes added to commit <span class="op">(us</span>e <span class="st">"git add"</span> and/or <span class="st">"git commit -a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="start-tracking" class="slide level2 center">
+<section id="start-tracking" class="slide level2">
 <h2>Start tracking</h2>
 <ul>
 <li><code>git add</code>: to stage the changes</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb8-1"><a href=""></a><span class="fu">git</span> add <span class="op">&lt;</span>file_name<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb11-1"><a href=""></a><span class="fu">git</span> add <span class="op">&lt;</span>file_name<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>several options:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb9-1"><a href=""></a><span class="fu">git</span> add <span class="at">-A</span>    <span class="co"># stage all changes: new, modified and deleted files</span></span>
-<span id="cb9-2"><a href=""></a><span class="fu">git</span> add .     <span class="co"># stage new and modified files</span></span>
-<span id="cb9-3"><a href=""></a><span class="fu">git</span> add <span class="at">-u</span>    <span class="co"># stage modified and deleted files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb12-1"><a href=""></a><span class="fu">git</span> add <span class="at">-A</span>    <span class="co"># stage all changes: new, modified and deleted files</span></span>
+<span id="cb12-2"><a href=""></a><span class="fu">git</span> add .     <span class="co"># stage new and modified files</span></span>
+<span id="cb12-3"><a href=""></a><span class="fu">git</span> add <span class="at">-u</span>    <span class="co"># stage modified and deleted files</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="to-stage-the-changes" class="slide level2 center">
+<section id="to-stage-the-changes" class="slide level2">
 <h2>To stage the changes</h2>
 <ul>
 <li><code>git commit</code>: to commit the changes staged with <code>git add</code></li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb10-1"><a href=""></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"some text for the commit message"</span></span>
-<span id="cb10-2"><a href=""></a><span class="ex">[main</span> d7cf2e6] some text for the commit message</span>
-<span id="cb10-3"><a href=""></a> <span class="ex">2</span> files changed, 18 insertions<span class="pp">(</span><span class="ss">+</span><span class="pp">)</span>, 5 deletions<span class="op">(-)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb13-1"><a href=""></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"some text for the commit message"</span></span>
+<span id="cb13-2"><a href=""></a><span class="ex">[main</span> d7cf2e6] some text for the commit message</span>
+<span id="cb13-3"><a href=""></a> <span class="ex">2</span> files changed, 18 insertions<span class="pp">(</span><span class="ss">+</span><span class="pp">)</span>, 5 deletions<span class="op">(-)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="to-upload-with-the-server" class="slide level2 center">
+<section id="to-upload-with-the-server" class="slide level2">
 <h2>To upload with the server</h2>
 <ul>
 <li><code>git push</code>: to <code>push</code> your changes to the <code>origin</code></li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb11-1"><a href=""></a><span class="fu">git</span> push</span>
-<span id="cb11-2"><a href=""></a></span>
-<span id="cb11-3"><a href=""></a><span class="ex">Enumerating</span> objects: 9, done.</span>
-<span id="cb11-4"><a href=""></a><span class="ex">Counting</span> objects: 100% <span class="pp">(</span><span class="ss">9/9</span><span class="pp">)</span>, done.</span>
-<span id="cb11-5"><a href=""></a><span class="ex">Delta</span> compression using up to 8 threads</span>
-<span id="cb11-6"><a href=""></a><span class="ex">Compressing</span> objects: 100% <span class="pp">(</span><span class="ss">5/5</span><span class="pp">)</span>, done.</span>
-<span id="cb11-7"><a href=""></a><span class="ex">Writing</span> objects: 100% <span class="pp">(</span><span class="ss">5/5</span><span class="pp">)</span>, 1002 bytes <span class="kw">|</span> <span class="ex">1002.00</span> KiB/s, done.</span>
-<span id="cb11-8"><a href=""></a><span class="ex">Total</span> 5 <span class="pp">(</span><span class="ss">delta 3</span><span class="pp">)</span>, reused 0 <span class="pp">(</span><span class="ss">delta 0</span><span class="pp">)</span>, pack-reused 0</span>
-<span id="cb11-9"><a href=""></a><span class="ex">remote:</span> Resolving deltas: 100% <span class="pp">(</span><span class="ss">3/3</span><span class="pp">)</span>, completed with 3 local objects.</span>
-<span id="cb11-10"><a href=""></a><span class="ex">To</span> https://github.com/yangmr04/git-recite-slides.git</span>
-<span id="cb11-11"><a href=""></a>   <span class="ex">5786288..efbbf37</span>  main <span class="at">-</span><span class="op">&gt;</span> main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb14-1"><a href=""></a><span class="fu">git</span> push</span>
+<span id="cb14-2"><a href=""></a></span>
+<span id="cb14-3"><a href=""></a><span class="ex">Enumerating</span> objects: 9, done.</span>
+<span id="cb14-4"><a href=""></a><span class="ex">Counting</span> objects: 100% <span class="pp">(</span><span class="ss">9/9</span><span class="pp">)</span>, done.</span>
+<span id="cb14-5"><a href=""></a><span class="ex">Delta</span> compression using up to 8 threads</span>
+<span id="cb14-6"><a href=""></a><span class="ex">Compressing</span> objects: 100% <span class="pp">(</span><span class="ss">5/5</span><span class="pp">)</span>, done.</span>
+<span id="cb14-7"><a href=""></a><span class="ex">Writing</span> objects: 100% <span class="pp">(</span><span class="ss">5/5</span><span class="pp">)</span>, 1002 bytes <span class="kw">|</span> <span class="ex">1002.00</span> KiB/s, done.</span>
+<span id="cb14-8"><a href=""></a><span class="ex">Total</span> 5 <span class="pp">(</span><span class="ss">delta 3</span><span class="pp">)</span>, reused 0 <span class="pp">(</span><span class="ss">delta 0</span><span class="pp">)</span>, pack-reused 0</span>
+<span id="cb14-9"><a href=""></a><span class="ex">remote:</span> Resolving deltas: 100% <span class="pp">(</span><span class="ss">3/3</span><span class="pp">)</span>, completed with 3 local objects.</span>
+<span id="cb14-10"><a href=""></a><span class="ex">To</span> https://github.com/yangmr04/git-recite-slides.git</span>
+<span id="cb14-11"><a href=""></a>   <span class="ex">5786288..efbbf37</span>  main <span class="at">-</span><span class="op">&gt;</span> main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="full-example" class="slide level2 center">
+<section id="full-example" class="slide level2">
 <h2>Full example</h2>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb12-1"><a href=""></a><span class="fu">git</span> pull</span>
-<span id="cb12-2"><a href=""></a><span class="ex">Already</span> up to date.</span>
-<span id="cb12-3"><a href=""></a></span>
-<span id="cb12-4"><a href=""></a><span class="fu">git</span> add hello.py</span>
-<span id="cb12-5"><a href=""></a></span>
-<span id="cb12-6"><a href=""></a><span class="fu">git</span> status</span>
-<span id="cb12-7"><a href=""></a><span class="ex">On</span> branch main</span>
-<span id="cb12-8"><a href=""></a><span class="ex">Changes</span> to be committed:</span>
-<span id="cb12-9"><a href=""></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git reset HEAD &lt;file&gt;..."</span> to unstage<span class="kw">)</span></span>
-<span id="cb12-10"><a href=""></a>   <span class="ex">new</span> file: hello.py</span>
-<span id="cb12-11"><a href=""></a></span>
-<span id="cb12-12"><a href=""></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"added hello.py"</span></span>
-<span id="cb12-13"><a href=""></a><span class="ex">[main</span> 2342a93] added hello.py</span>
-<span id="cb12-14"><a href=""></a> <span class="ex">1</span> file changed, 1 insertion<span class="op">(+)</span></span>
-<span id="cb12-15"><a href=""></a></span>
-<span id="cb12-16"><a href=""></a><span class="fu">git</span> push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb15-1"><a href=""></a><span class="fu">git</span> pull</span>
+<span id="cb15-2"><a href=""></a><span class="ex">Already</span> up to date.</span>
+<span id="cb15-3"><a href=""></a></span>
+<span id="cb15-4"><a href=""></a><span class="fu">git</span> add hello.py</span>
+<span id="cb15-5"><a href=""></a></span>
+<span id="cb15-6"><a href=""></a><span class="fu">git</span> status</span>
+<span id="cb15-7"><a href=""></a><span class="ex">On</span> branch main</span>
+<span id="cb15-8"><a href=""></a><span class="ex">Changes</span> to be committed:</span>
+<span id="cb15-9"><a href=""></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git reset HEAD &lt;file&gt;..."</span> to unstage<span class="kw">)</span></span>
+<span id="cb15-10"><a href=""></a>   <span class="ex">new</span> file: hello.py</span>
+<span id="cb15-11"><a href=""></a></span>
+<span id="cb15-12"><a href=""></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"added hello.py"</span></span>
+<span id="cb15-13"><a href=""></a><span class="ex">[main</span> 2342a93] added hello.py</span>
+<span id="cb15-14"><a href=""></a> <span class="ex">1</span> file changed, 1 insertion<span class="op">(+)</span></span>
+<span id="cb15-15"><a href=""></a></span>
+<span id="cb15-16"><a href=""></a><span class="fu">git</span> push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="something-unexpected-merge-conflict" class="slide level2 center scrollable">
+<section id="something-unexpected-merge-conflict" class="slide level2 scrollable">
 <h2>Something unexpected: <em>merge conflict</em></h2>
 <p>Merge conflicts occur when competing changes are made to the same line of a file.<sup>1</sup> It will block the <code>push</code> actions until the conflicts are resolved. A merge conflict looks like this: &nbsp;</p>
 <p>&nbsp;</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb13-1"><a href=""></a><span class="ex">If</span> you have questions, please</span>
-<span id="cb13-2"><a href=""></a><span class="op">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
-<span id="cb13-3"><a href=""></a><span class="ex">open</span> an issue</span>
-<span id="cb13-4"><a href=""></a><span class="ex">=======</span></span>
-<span id="cb13-5"><a href=""></a><span class="ex">ask</span> your question in IRC.</span>
-<span id="cb13-6"><a href=""></a><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> branch-a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource zsh number-lines code-with-copy"><code class="sourceCode zsh"><span id="cb16-1"><a href=""></a><span class="ex">If</span> you have questions, please</span>
+<span id="cb16-2"><a href=""></a><span class="op">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span> HEAD</span>
+<span id="cb16-3"><a href=""></a><span class="ex">open</span> an issue</span>
+<span id="cb16-4"><a href=""></a><span class="ex">=======</span></span>
+<span id="cb16-5"><a href=""></a><span class="ex">ask</span> your question in IRC.</span>
+<span id="cb16-6"><a href=""></a><span class="op">&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span> branch-a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 <aside><div>
 <hr>
@@ -770,7 +833,7 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <li id="fn2"><p><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line">Resolving a merge conflict using the command line</a><a href="#/fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </div><ol class="aside-footnotes"></ol></aside></section>
-<section id="other-concepts-not-covered-here" class="slide level2 center">
+<section id="other-concepts-not-covered-here" class="slide level2">
 <h2>Other concepts not covered here</h2>
 <ul>
 <li>Pull requests</li>
@@ -778,7 +841,7 @@ What is RSE, and how does it fit in Chemistry</p></li>
 <li>Forks</li>
 </ul>
 </section>
-<section id="take-home-message" class="slide level2 center">
+<section id="take-home-message" class="slide level2">
 <h2>Take-home message</h2>
 <ul>
 <li>Version control is a powerful tool</li>
@@ -875,7 +938,7 @@ What is RSE, and how does it fit in Chemistry</p></li>
         disableLayout: false,
 
         // Vertical centering of slides
-        center: true,
+        center: false,
 
         // Enables touch navigation on devices with touch input
         touch: true,
