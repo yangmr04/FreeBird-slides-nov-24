@@ -5,14 +5,18 @@
 
 
 1. **Introduction to `FreeBird.jl`**  
-		Design, functionality, and extensibility. 
+    Design, functionality, and extensibility
 
 
 2. **Introduction to Research Software Engineering (RSE)**  
     What is RSE, and how does it fit in Chemistry
 
 
-## What is version control
+## Motivation 
+
+Problems in computational surface modeling:  
+- No available tools
+- Tools are too slow
 
 ![“notFinal.doc” by Jorge Cham, <https://www.phdcomics.com>](https://swcarpentry.github.io/git-novice/fig/phd101212s.png)
 
