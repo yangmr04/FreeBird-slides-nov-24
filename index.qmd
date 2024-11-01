@@ -5,11 +5,11 @@
 
 
 1. **Introduction to `FreeBird.jl`**  
-   How it works, what it does, and why it's important
+		Design, functionality, and extensibility. 
 
 
 2. **Introduction to Research Software Engineering (RSE)**  
-    What is RSE, and why it's important
+    What is RSE, and how does it fit in Chemistry
 
 
 ## What is version control
