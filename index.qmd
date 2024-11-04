@@ -98,7 +98,7 @@ ls = LJAtomWalkers(walkers, lj)
 
 ```{julia}
 #| echo: true
-#| eval: false
+#| eval: true
 mc = MCRandomWalkClone()
 ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)
 save = SaveEveryN(n_traj=10, n_snap=10_000)
@@ -418,7 +418,7 @@ h = GenericLatticeHamiltonian(adsorption_energy, [nn_energy, nnn_energy], u"eV")
 
 ```{julia}
 #| echo: true
-#| eval: false
+#| eval: true
 walkers = [deepcopy(initial_lattice) for i in 1:2000]
 
 for walker in walkers
