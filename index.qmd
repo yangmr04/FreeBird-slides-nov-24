@@ -60,13 +60,13 @@
 
 ## Atomistic walkers
 
-```{julia}
+<!-- ```{julia}
 #| output: none
 #| eval: true
 if isfile("output_df.csv")
   run(`rm output_df.csv output.traj.extxyz`) # delete previous output
 end
-```
+``` -->
 
 ```{julia}
 #| echo: true
@@ -104,12 +104,12 @@ ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)
 save = SaveEveryN(n_traj=10, n_snap=10_000)
 energies, liveset, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save)
 ```
-```{julia}
+<!-- ```{julia}
 #| output: none
 if isfile("output_df.csv")
   run(`rm output_df.csv output.traj.extxyz`) # delete previous output
 end
-```
+``` -->
 
 
 
