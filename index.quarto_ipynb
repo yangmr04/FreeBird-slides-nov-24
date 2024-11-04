@@ -1,0 +1,641 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Engineering a computational surface modeling toolbox in Julia\"\n",
+        "# subtitle: \"An introduction to FreeBird.jl\"\n",
+        "author: \"Ray M. Yang\"\n",
+        "# date: \"Nov 1, 2024\"\n",
+        "institute: \"Washington University in St. Louis\"\n",
+        "location: \"PChem Group Meeting\"\n",
+        "jupyter: julia-1.11\n",
+        "format: #revealjs\n",
+        "  revealjs:\n",
+        "    # fontsize: 2em\n",
+        "    # theme: dark\n",
+        "    slides-url: https://samforeman.me/talks/llms-at-scale/slides.html\n",
+        "    template-partials:\n",
+        "      - ./title-slide.html \n",
+        "      # - ./title-fancy/title-slide.html\n",
+        "      # - ./title_slide_template.html\n",
+        "      # - ../../title-slide.html\n",
+        "    title-slide-attributes:\n",
+        "      data-background-iframe: https://emilhvitfeldt.github.io/quarto-iframe-examples/colored-particles/index.html\n",
+        "      data-background-size: contain\n",
+        "      data-background-color: white\n",
+        "      background-color: white\n",
+        "    mermaid:\n",
+        "      theme: neutral\n",
+        "    scrollable: true\n",
+        "    background-color: white\n",
+        "    # output-file: \"slides.html\"\n",
+        "    navigation-mode: linear\n",
+        "    # title-block-style: none \n",
+        "    slide-number: c\n",
+        "    # title-slide-style: default\n",
+        "    chalkboard:\n",
+        "      # buttons: false\n",
+        "      chalkboard: true\n",
+        "    auto-animate: true\n",
+        "    reference-location: section\n",
+        "    touch: true\n",
+        "    pause: false\n",
+        "    footnotes-hover: true\n",
+        "    citations-hover: true\n",
+        "    preview-links: true\n",
+        "    controls-tutorial: true\n",
+        "    controls: false\n",
+        "    logo: WashU.png\n",
+        "    history: false\n",
+        "    highlight-style: \"atom-one\"\n",
+        "    # center: true\n",
+        "    default-image-extension: svg\n",
+        "    code-overflow: scroll\n",
+        "    html-math-method: katex\n",
+        "    fig-align: center\n",
+        "    css:\n",
+        "      # - css/default.css\n",
+        "      - css/custom.css\n",
+        "    # theme:\n",
+        "    #   # - light:\n",
+        "    #   - white\n",
+        "    #   - ../../css/title-slide-template.scss\n",
+        "    #   - ../../css/reveal/reveal.scss\n",
+        "    #   - ../../css/common.scss\n",
+        "    #   - ../../css/light.scss\n",
+        "    #   - ../../css/syntax-light.scss\n",
+        "    #   - ../../css/callout-cards.scss\n",
+        "      # - dark:\n",
+        "      #   - black\n",
+        "      #   - ./title-fancy/title-slide-template.scss\n",
+        "      #   - ../../css/reveal/reveal.scss\n",
+        "      #   - ../../css/common.scss\n",
+        "      #   - ../../css/dark.scss\n",
+        "      #   - ../../css/syntax-dark.scss\n",
+        "      #   - ../../css/callout-cards.scss\n",
+        "    # theme: [title-fancy/title-slide-template.scss]\n",
+        "    callout-style: simple\n",
+        "    # css: [css/default.css, css/callouts.css]\n",
+        "---\n",
+        "\n",
+        "\n",
+        "\n",
+        "\n",
+        "## Overview\n",
+        "\n",
+        "\n",
+        "1. **Introduction to `FreeBird.jl`**  \n",
+        "    Design, functionality, and extensibility\n",
+        "\n",
+        "\n",
+        "2. **Introduction to Research Software Engineering (RSE)**  \n",
+        "    What is RSE, and how does it fit in Chemistry\n",
+        "\n",
+        "\n",
+        "## What is `FreeBird.jl`\n",
+        "\n",
+        "- It's a computational package\n",
+        "- It's developed by the Wexler Group\n",
+        "- It does surface *free* energy calculations via *nested* sampling\n",
+        "- It's written in [Julia](https://julialang.org/), a modern, high-level programming language\n",
+        "\n",
+        "\n",
+        "## What is [Julia](https://julialang.org/)?\n",
+        "\n",
+        "<img align=\"left\" src=\"https://julialang.org/assets/infra/logo.svg\" height=\"80\" style=\"padding-right: 20px;\"/>  is a high-level, high-performance, dynamic programming language for technical computing. It's fast, easy to learn, and has a syntax that is familiar to users of other technical computing environments.\n",
+        "\n",
+        "- Version 1.0 was released in 2018\n",
+        "- Developed by mathematician Alan Edelman *et al.* at MIT\n",
+        "- It's designed for high-performance numerical analysis and computational science\n",
+        "- It's free and open source\n",
+        "\n",
+        "\n",
+        "\n",
+        "## `FreeBird.jl` design\n",
+        "\n",
+        "- It's modular\n",
+        "- It's extensible\n",
+        "- It's user-friendly\n",
+        "- It's well-documented\n",
+        "- It's open-source\n",
+        "\n",
+        "\n",
+        "## `FreeBird.jl` functionality\n",
+        "\n",
+        "- Systems: atomistic and lattice models\n",
+        "- Energy calculator: Lennard-Jones and lattice Hamiltonians\n",
+        "- Methods: nested sampling, Metropolis Monte Carlo, exact enumeration, Wang-Landau sampling\n",
+        "\n",
+        "\n",
+        "## Nested sampling\n",
+        "\n",
+        "\n",
+        "\n",
+        "## Atomistic walkers\n"
+      ],
+      "id": "13512a73"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| output: none\n",
+        "#| eval: true\n",
+        "if isfile(\"output_df.csv\")\n",
+        "  run(`rm output_df.csv output.traj.extxyz`) # delete previous output\n",
+        "end"
+      ],
+      "id": "a5354f45",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "#| eval: true\n",
+        "using FreeBird\n",
+        "walkers = AtomWalker.(generate_initial_configs(120, 562.5, 6))\n",
+        "lj = LJParameters(epsilon=0.1, sigma=2.5)"
+      ],
+      "id": "a82d9a13",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Atomistic walkers"
+      ],
+      "id": "6bfb3d29"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "walkers[1]"
+      ],
+      "id": "6ab51fae",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Atomistic walkers"
+      ],
+      "id": "cc188975"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "walkers[1].configuration"
+      ],
+      "id": "265e967b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Construct the liveset\n"
+      ],
+      "id": "c8f05b90"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "ls = LJAtomWalkers(walkers, lj)"
+      ],
+      "id": "75931e8e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Run nested sampling\n"
+      ],
+      "id": "ef7cfcdf"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "#| eval: true\n",
+        "mc = MCRandomWalkClone()\n",
+        "ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)\n",
+        "save = SaveEveryN(n_traj=10, n_snap=10_000)\n",
+        "energies, liveset, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save)"
+      ],
+      "id": "2db87179",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Nested sampling results\n"
+      ],
+      "id": "107a0c0a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "liveset.walkers[1].configuration"
+      ],
+      "id": "11c000eb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Nested sampling results\n"
+      ],
+      "id": "432f6384"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "using Plots\n",
+        "plotly()\n",
+        "plot(energies.iter[1:end], energies.emax[1:end], ylabel=\"Energy\", xlabel=\"Iteration\", label=\"\")"
+      ],
+      "id": "466f9ec0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Nested sampling results\n"
+      ],
+      "id": "e2ba8bae"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "plot(energies.iter[100:end], energies.emax[100:end], ylabel=\"Energy\", xlabel=\"Iteration\", label=\"\")"
+      ],
+      "id": "d416f88a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Run nested sampling\n",
+        "\n",
+        "Nested sampling in 7 lines of code!\n"
+      ],
+      "id": "0de29dbf"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "#| eval: false\n",
+        "ls = LJAtomWalkers(AtomWalker.(generate_initial_configs(120, 562.5, 6)), LJParameters())\n",
+        "mc = MCRandomWalkClone()\n",
+        "ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)\n",
+        "save = SaveEveryN(n_traj=10, n_snap=10_000)\n",
+        "energies, liveset, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save)"
+      ],
+      "id": "0b0104bb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Or, in a single line if you really want to!"
+      ],
+      "id": "cc26b625"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "#| eval: false\n",
+        "energies, liveset, _ = nested_sampling_loop!(LJAtomWalkers(AtomWalker.(generate_initial_configs(100, 100.0, 6)), LJParameters()), NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200), 10_000, MCRandomWalkClone(), SaveEveryN(n_traj=10, n_snap=10_000))"
+      ],
+      "id": "29a7d452",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Accessing the documentation\n",
+        "\n",
+        "```julia\n",
+        "help?> nested_sampling_loop!\n",
+        "search: nested_sampling_loop! nested_sampling_step!\n",
+        "\n",
+        "  nested_sampling_loop!(liveset::AtomWalkers, ns_params::NestedSamplingParameters, n_steps::Int64, mc_routine::MCRoutine; args...)\n",
+        "\n",
+        "  Perform a nested sampling loop for a given number of steps.\n",
+        "\n",
+        "  Arguments\n",
+        "  ≡≡≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  liveset::AtomWalkers: The initial set of walkers.\n",
+        "\n",
+        "    •  ns_params::NestedSamplingParameters: The parameters for nested sampling.\n",
+        "\n",
+        "    •  n_steps::Int64: The number of steps to perform.\n",
+        "\n",
+        "    •  mc_routine::MCRoutine: The Monte Carlo routine to use.\n",
+        "\n",
+        "  Returns\n",
+        "  ≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  df: A DataFrame containing the iteration number and maximum energy for each step.\n",
+        "\n",
+        "    •  liveset: The updated set of walkers.\n",
+        "\n",
+        "    •  ns_params: The updated nested sampling parameters.\n",
+        "\n",
+        "  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n",
+        "\n",
+        "  nested_sampling_loop!(liveset::LatticeGasWalkers, ns_params::LatticeNestedSamplingParameters, n_steps::Int64, mc_routine::MCRoutine; args...)\n",
+        "\n",
+        "  Perform a nested sampling loop on a lattice gas system for a given number of steps.\n",
+        "\n",
+        "  Arguments\n",
+        "  ≡≡≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  liveset::LatticeGasWalkers: The initial set of walkers.\n",
+        "\n",
+        "    •  ns_params::LatticeNestedSamplingParameters: The parameters for nested sampling.\n",
+        "\n",
+        "    •  n_steps::Int64: The number of steps to perform.\n",
+        "\n",
+        "    •  mc_routine::MCRoutine: The Monte Carlo routine to use.\n",
+        "\n",
+        "  Keyword Arguments\n",
+        "  ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  args...: Additional arguments.\n",
+        "\n",
+        "  Returns\n",
+        "  ≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  df: A DataFrame containing the iteration number and maximum energy for each step.\n",
+        "\n",
+        "    •  liveset: The updated set of walkers.\n",
+        "\n",
+        "    •  ns_params: The updated nested sampling parameters.\n",
+        "\n",
+        "  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n",
+        "\n",
+        "  nested_sampling_loop!(liveset::AtomWalkers, n_steps::Int64, mc_routine::MixedMCRoutine, save_strategy::DataSavingStrategy)\n",
+        "\n",
+        "  Perform a nested sampling loop for a given number of steps.\n",
+        "\n",
+        "  Arguments\n",
+        "  ≡≡≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  liveset::AtomWalkers: The initial set of walkers.\n",
+        "\n",
+        "    •  n_steps::Int64: The number of steps to perform.\n",
+        "\n",
+        "    •  mc_routine::MixedMCRoutine: The mixed Monte Carlo routine to use.\n",
+        "\n",
+        "    •  save_strategy::DataSavingStrategy: The strategy for saving data.\n",
+        "\n",
+        "  Returns\n",
+        "  ≡≡≡≡≡≡≡\n",
+        "\n",
+        "    •  df::DataFrame: The data frame containing the iteration number and maximum energy for each step.\n",
+        "\n",
+        "    •  liveset::AtomWalkers: The updated set of walkers.\n",
+        "\n",
+        "    •  mc_routine.ns_params_main: The updated nested sampling parameters for the main routine.\n",
+        "```\n",
+        "\n",
+        "## Accessing the documentation\n",
+        "\n",
+        "```julia\n",
+        "help?> NestedSamplingParameters\n",
+        "search: NestedSamplingParameters LatticeNestedSamplingParameters nested_sampling_step!\n",
+        "\n",
+        "  mutable struct NestedSamplingParameters <: SamplingParameters\n",
+        "\n",
+        "  The NestedSamplingParameters struct represents the parameters used in the nested sampling scheme.\n",
+        "\n",
+        "  Fields\n",
+        "  ≡≡≡≡≡≡\n",
+        "\n",
+        "    •  mc_steps::Int64: The number of total Monte Carlo moves to perform.\n",
+        "\n",
+        "    •  initial_step_size::Float64: The initial step size, which is the fallback step size if MC routine fails to accept a move.\n",
+        "\n",
+        "    •  step_size::Float64: The on-the-fly step size used in the sampling process.\n",
+        "\n",
+        "    •  step_size_lo::Float64: The lower bound of the step size.\n",
+        "\n",
+        "    •  step_size_up::Float64: The upper bound of the step size.\n",
+        "\n",
+        "    •  fail_count::Int64: The number of failed MC moves in a row.\n",
+        "\n",
+        "    •  allowed_fail_count::Int64: The maximum number of failed MC moves allowed before resetting the step size.\n",
+        "```\n",
+        "\n",
+        "## Finding phase transitions\n"
+      ],
+      "id": "40b54710"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "#| eval: true\n",
+        "# Calculate the ω factors\n",
+        "ωi = ωᵢ(energies.iter, 100)\n",
+        "# Shift the energies to be greater than or equal to zero\n",
+        "Ei = energies.emax .- minimum(energies.emax)\n",
+        "# Specify the temperatures that we are interested in\n",
+        "Ts = collect(1:0.1:10000)\n",
+        "# Define the Boltzmann constant\n",
+        "kb = 8.617333262e-5 # eV/K\n",
+        "# Calculate the inverse temperatures\n",
+        "β = 1 ./(kb.*Ts)\n",
+        "# Define the degrees of freedom, which is 3×6 for the 6-particle system\n",
+        "dof = 18\n",
+        "# Calculate the partition functions for each temperature\n",
+        "Zs = [partition_function(b, ωi, Ei) for b in β]\n",
+        "# Calculate the internal energies for each temperature\n",
+        "U = [internal_energy(b, ωi, Ei) for b in β]\n",
+        "# Calculate the heat capacities as a function of temperature\n",
+        "cvs = cv(energies, β, dof, 100)"
+      ],
+      "id": "e4493239",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Finding surface phase transitions\n"
+      ],
+      "id": "7a3cc799"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| eval: true\n",
+        "plot(Ts, cvs./kb, label=\"FreeBird\", xlabel=\"T(K)\", ylabel=\"Heat Capacity (Kb)\", title=\"6-particle Heat Capacity\", legend=:topleft)"
+      ],
+      "id": "4c543c70",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Surface stuff\n"
+      ],
+      "id": "f1a77b7d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| output: none\n",
+        "if isfile(\"output_df.csv\")\n",
+        "  run(`rm output_df.csv output.traj.extxyz`) # delete previous output\n",
+        "end"
+      ],
+      "id": "e10b7684",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "using AtomsBase\n",
+        "configs =  read_configs(\"slab.extxyz\",pbc=\"TTF\")\n",
+        "configs = FastSystem.(configs)\n",
+        "slabs = AtomWalker{2}.(configs, list_num_par=[80,6],frozen=[1,0])"
+      ],
+      "id": "84d006f4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Surface stuff"
+      ],
+      "id": "d1ee4693"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: true\n",
+        "slabs[1].configuration"
+      ],
+      "id": "08061f27",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Surface stuff\n",
+        "<!-- ```{julia}\n",
+        "#| echo: true\n",
+        "#| eval: false\n",
+        "surf_lj = LJParameters(epsilon=0.1, sigma=2.5, cutoff=4.0)\n",
+        "surf_ls = LJAtomWalkers(slabs, surf_lj)\n",
+        "mc = MCRandomWalkClone()\n",
+        "surf_ns_params = NestedSamplingParameters(500, 0.1, 0.01, 1e-5, 1.0, 0, 200)\n",
+        "save = SaveEveryN(n_traj=10, n_snap=20_000)\n",
+        "surf_energies, liveset, _ = nested_sampling_loop!(surf_ls, surf_ns_params, 50_000, mc, save)\n",
+        "``` -->\n",
+        "\n",
+        "## Surface results\n",
+        "\n",
+        "<!-- ```{julia}\n",
+        "#| echo: true\n",
+        "#| eval: false\n",
+        "surf_ls.walkers[1].configuration\n",
+        "``` -->\n",
+        "\n",
+        "\n",
+        "\n",
+        "## What's next\n",
+        "\n",
+        "- Publish! There are some journals that are specifically designed for software papers\n",
+        "\n",
+        "::: {style=\"text-align: center; margin-top: 1em\"}\n",
+        "[Journal of Open Source Software](https://joss.theoj.org/){preview-link=\"true\" style=\"text-align: center\"}\n",
+        ":::\n",
+        "\n",
+        "Or, traditional journals like: \n",
+        "\n",
+        "::: {style=\"text-align: center; margin-top: 1em\"}\n",
+        "[The Journal of Chemical Physics](https://pubs.aip.org/aip/jcp/article/159/16/164101/2918010/ACEpotentials-jl-A-Julia-implementation-of-the){preview-link=\"true\" style=\"text-align: center\"}\n",
+        ":::\n",
+        "\n",
+        "\n",
+        "## Take-home message\n",
+        "- Version control is a powerful tool\n",
+        "- It's a good practice for code development\n",
+        "- It's essential for collaborative projects\n",
+        "- It has great importance in scientific reproducibility\n",
+        "\n",
+        "Start using it, now!"
+      ],
+      "id": "c3f0341e"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "julia-1.11",
+      "language": "julia",
+      "display_name": "Julia 1.11.1",
+      "path": "/Users/myang/Library/Jupyter/kernels/julia-1.11"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

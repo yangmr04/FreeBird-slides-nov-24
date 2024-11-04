@@ -29,7 +29,7 @@
 - It's designed for high-performance numerical analysis and computational science
 - It's free and open source
 
-## Nested sampling
+
 
 ## `FreeBird.jl` design
 
@@ -42,25 +42,31 @@
 
 ## `FreeBird.jl` functionality
 
+- Systems: atomistic and lattice models
+- Energy calculator: Lennard-Jones and lattice Hamiltonians
+- Methods: nested sampling, Metropolis Monte Carlo, exact enumeration, Wang-Landau sampling
+
+
+## Nested sampling
+
+
 
 ## Atomistic walkers
 
 ```{julia}
-#| echo: true
+#| output: none
+#| eval: true
+if isfile("output_df.csv")
+  run(`rm output_df.csv output.traj.extxyz`) # delete previous output
+end
+```
 
+```{julia}
+#| echo: true
+#| eval: true
 using FreeBird
-configs = generate_initial_configs(100, 10.0, 6)
-```
-
-```{julia}
-#| echo: true
-lj = LJParameters()
-```
-## Atomistic walkers
-
-```{julia}
-#| echo: true
-walkers = AtomWalker.(configs)
+walkers = AtomWalker.(generate_initial_configs(120, 562.5, 6))
+lj = LJParameters(epsilon=0.1, sigma=2.5)
 ```
 
 ## Atomistic walkers
@@ -85,25 +91,21 @@ ls = LJAtomWalkers(walkers, lj)
 
 ```{julia}
 #| echo: true
+#| eval: true
 mc = MCRandomWalkClone()
 ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)
-n_iters = 10_000
-save = SaveEveryN(n_traj=10, n_snap=n_iters)
+save = SaveEveryN(n_traj=10, n_snap=10_000)
+energies, liveset, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save)
 ```
 
-```{julia}
-#| echo: true
-if isfile("output_df.csv")
-run(`rm output_df.csv output.ls.extxyz output.traj.extxyz`) # delete previous output
-end
-energies, live, _ = nested_sampling_loop!(ls, ns_params, n_iters, mc, save)
-```
+
+
 
 ## Nested sampling results
 
 ```{julia}
 #| echo: true
-live.walkers[1].configuration
+liveset.walkers[1].configuration
 ```
 
 ## Nested sampling results
@@ -111,329 +113,244 @@ live.walkers[1].configuration
 ```{julia}
 using Plots
 plotly()
-plot(energies.iter[end-5000:end], energies.emax[end-5000:end], label="Energy")
+plot(energies.iter[1:end], energies.emax[1:end], ylabel="Energy", xlabel="Iteration", label="")
+```
+
+## Nested sampling results
+
+```{julia}
+plot(energies.iter[100:end], energies.emax[100:end], ylabel="Energy", xlabel="Iteration", label="")
 ```
 
 
+## Run nested sampling
 
-<!-- ::: {style="text-align: center; margin-top: 1em"}
-[Journal of Open Source Software](https://joss.theoj.org/){preview-link="true" style="text-align: center"}
-::: -->
-
-## Executable Code
+Nested sampling in 7 lines of code!
 
 ```{julia}
 #| echo: true
+#| eval: false
+ls = LJAtomWalkers(AtomWalker.(generate_initial_configs(120, 562.5, 6)), LJParameters())
+mc = MCRandomWalkClone()
+ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)
+save = SaveEveryN(n_traj=10, n_snap=10_000)
+energies, liveset, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save)
+```
 
-function hello(name)
-    println("Hello, $(name)!")
+Or, in a single line if you really want to!
+```{julia}
+#| echo: true
+#| eval: false
+energies, liveset, _ = nested_sampling_loop!(LJAtomWalkers(AtomWalker.(generate_initial_configs(100, 100.0, 6)), LJParameters()), NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200), 10_000, MCRandomWalkClone(), SaveEveryN(n_traj=10, n_snap=10_000))
+```
+
+## Accessing the documentation
+
+```julia
+help?> nested_sampling_loop!
+search: nested_sampling_loop! nested_sampling_step!
+
+  nested_sampling_loop!(liveset::AtomWalkers, ns_params::NestedSamplingParameters, n_steps::Int64, mc_routine::MCRoutine; args...)
+
+  Perform a nested sampling loop for a given number of steps.
+
+  Arguments
+  ≡≡≡≡≡≡≡≡≡
+
+    •  liveset::AtomWalkers: The initial set of walkers.
+
+    •  ns_params::NestedSamplingParameters: The parameters for nested sampling.
+
+    •  n_steps::Int64: The number of steps to perform.
+
+    •  mc_routine::MCRoutine: The Monte Carlo routine to use.
+
+  Returns
+  ≡≡≡≡≡≡≡
+
+    •  df: A DataFrame containing the iteration number and maximum energy for each step.
+
+    •  liveset: The updated set of walkers.
+
+    •  ns_params: The updated nested sampling parameters.
+
+  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  nested_sampling_loop!(liveset::LatticeGasWalkers, ns_params::LatticeNestedSamplingParameters, n_steps::Int64, mc_routine::MCRoutine; args...)
+
+  Perform a nested sampling loop on a lattice gas system for a given number of steps.
+
+  Arguments
+  ≡≡≡≡≡≡≡≡≡
+
+    •  liveset::LatticeGasWalkers: The initial set of walkers.
+
+    •  ns_params::LatticeNestedSamplingParameters: The parameters for nested sampling.
+
+    •  n_steps::Int64: The number of steps to perform.
+
+    •  mc_routine::MCRoutine: The Monte Carlo routine to use.
+
+  Keyword Arguments
+  ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+
+    •  args...: Additional arguments.
+
+  Returns
+  ≡≡≡≡≡≡≡
+
+    •  df: A DataFrame containing the iteration number and maximum energy for each step.
+
+    •  liveset: The updated set of walkers.
+
+    •  ns_params: The updated nested sampling parameters.
+
+  ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  nested_sampling_loop!(liveset::AtomWalkers, n_steps::Int64, mc_routine::MixedMCRoutine, save_strategy::DataSavingStrategy)
+
+  Perform a nested sampling loop for a given number of steps.
+
+  Arguments
+  ≡≡≡≡≡≡≡≡≡
+
+    •  liveset::AtomWalkers: The initial set of walkers.
+
+    •  n_steps::Int64: The number of steps to perform.
+
+    •  mc_routine::MixedMCRoutine: The mixed Monte Carlo routine to use.
+
+    •  save_strategy::DataSavingStrategy: The strategy for saving data.
+
+  Returns
+  ≡≡≡≡≡≡≡
+
+    •  df::DataFrame: The data frame containing the iteration number and maximum energy for each step.
+
+    •  liveset::AtomWalkers: The updated set of walkers.
+
+    •  mc_routine.ns_params_main: The updated nested sampling parameters for the main routine.
+```
+
+## Accessing the documentation
+
+```julia
+help?> NestedSamplingParameters
+search: NestedSamplingParameters LatticeNestedSamplingParameters nested_sampling_step!
+
+  mutable struct NestedSamplingParameters <: SamplingParameters
+
+  The NestedSamplingParameters struct represents the parameters used in the nested sampling scheme.
+
+  Fields
+  ≡≡≡≡≡≡
+
+    •  mc_steps::Int64: The number of total Monte Carlo moves to perform.
+
+    •  initial_step_size::Float64: The initial step size, which is the fallback step size if MC routine fails to accept a move.
+
+    •  step_size::Float64: The on-the-fly step size used in the sampling process.
+
+    •  step_size_lo::Float64: The lower bound of the step size.
+
+    •  step_size_up::Float64: The upper bound of the step size.
+
+    •  fail_count::Int64: The number of failed MC moves in a row.
+
+    •  allowed_fail_count::Int64: The maximum number of failed MC moves allowed before resetting the step size.
+```
+
+## Finding phase transitions
+
+```{julia}
+#| echo: true
+#| eval: true
+# Calculate the ω factors
+ωi = ωᵢ(energies.iter, 100)
+# Shift the energies to be greater than or equal to zero
+Ei = energies.emax .- minimum(energies.emax)
+# Specify the temperatures that we are interested in
+Ts = collect(1:0.1:10000)
+# Define the Boltzmann constant
+kb = 8.617333262e-5 # eV/K
+# Calculate the inverse temperatures
+β = 1 ./(kb.*Ts)
+# Define the degrees of freedom, which is 3×6 for the 6-particle system
+dof = 18
+# Calculate the partition functions for each temperature
+Zs = [partition_function(b, ωi, Ei) for b in β]
+# Calculate the internal energies for each temperature
+U = [internal_energy(b, ωi, Ei) for b in β]
+# Calculate the heat capacities as a function of temperature
+cvs = cv(energies, β, dof, 100)
+```
+
+## Finding surface phase transitions
+
+```{julia}
+#| echo: false
+#| eval: true
+plot(Ts, cvs./kb, label="FreeBird", xlabel="T(K)", ylabel="Heat Capacity (Kb)", title="6-particle Heat Capacity", legend=:topleft)
+```
+
+## Surface stuff
+
+```{julia}
+#| output: none
+if isfile("output_df.csv")
+  run(`rm output_df.csv output.traj.extxyz`) # delete previous output
 end
-
-hello("hi")
 ```
 
-::: footer
-Learn more: [Executable Code](https://quarto.org/docs/presentations/revealjs/#executable-code)
+```{julia}
+#| echo: true
+using AtomsBase
+configs =  read_configs("slab.extxyz",pbc="TTF")
+configs = FastSystem.(configs)
+slabs = AtomWalker{2}.(configs, list_num_par=[80,6],frozen=[1,0])
+```
+## Surface stuff
+```{julia}
+#| echo: true
+slabs[1].configuration
+```
+
+## Surface stuff
+<!-- ```{julia}
+#| echo: true
+#| eval: false
+surf_lj = LJParameters(epsilon=0.1, sigma=2.5, cutoff=4.0)
+surf_ls = LJAtomWalkers(slabs, surf_lj)
+mc = MCRandomWalkClone()
+surf_ns_params = NestedSamplingParameters(500, 0.1, 0.01, 1e-5, 1.0, 0, 200)
+save = SaveEveryN(n_traj=10, n_snap=20_000)
+surf_energies, liveset, _ = nested_sampling_loop!(surf_ls, surf_ns_params, 50_000, mc, save)
+``` -->
+
+## Surface results
+
+<!-- ```{julia}
+#| echo: true
+#| eval: false
+surf_ls.walkers[1].configuration
+``` -->
+
+
+
+## What's next
+
+- Publish! There are some journals that are specifically designed for software papers
+
+::: {style="text-align: center; margin-top: 1em"}
+[Journal of Open Source Software](https://joss.theoj.org/){preview-link="true" style="text-align: center"}
 :::
 
-## LaTeX Equations
+Or, traditional journals like: 
 
-[MathJax](https://www.mathjax.org/) rendering of equations to HTML
-
-::: columns
-::: {.column width="40%"}
-``` tex
-\begin{gather*}
-a_1=b_1+c_1\\
-a_2=b_2+c_2-d_2+e_2
-\end{gather*}
-
-\begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
-\end{align}
-```
+::: {style="text-align: center; margin-top: 1em"}
+[The Journal of Chemical Physics](https://pubs.aip.org/aip/jcp/article/159/16/164101/2918010/ACEpotentials-jl-A-Julia-implementation-of-the){preview-link="true" style="text-align: center"}
 :::
 
-::: {.column width="60%"}
-```{=tex}
-\begin{gather*}
-a_1=b_1+c_1\\
-a_2=b_2+c_2-d_2+e_2
-\end{gather*}
-```
-```{=tex}
-\begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
-\end{align}
-```
-:::
-:::
-
-::: footer
-Learn more: [LaTeX Equations](https://quarto.org/docs/authoring/markdown-basics.html#equations)
-:::
-
-
-
-## What is version control
-
-Version control (also known as revision control, source control, and source code management) is the software engineering practice of controlling computer files and versions of files; primarily source code text files, but generally any type of file. ^[<https://en.wikipedia.org/wiki/Version_control>]
-
-. . .
-
-- it's a concept, and `Git` is a software
-- and [GitHub](https://github.com/) is a platform/host/server...
-
-## What is `Git` {#sec-git .centeredslide}
-
-- it's a software
-- it's free and open source
-- it's the  *de facto* standard version control system but there are many more (both open and proprietary)
-- it's independent of network access or a central server
-
-
-## What is [GitHub](https://github.com/)?
-
-- it's a platform/host/server...
-- it's free but **NOT** open source
-- it's owned by Microsoft since 2018
-- there are many others, e.g., [Bitbucket](https://bitbucket.org/product), [GitLab](https://about.gitlab.com)
-
-## The components
-
-There are the local parts and the server part. Typically, you interact with all parts through the **command line interface (CLI)**, which contains a set of text-based instructions.
-
-Nowadays, there are **graphical user interfaces (GUIs)** available for your convenience. Many **integrated development environments (IDEs)** also have integrated git functionalities, either built-in ot via plug-ins.
-
-
-## The direction of version control: `pull`
-```{dot}
-digraph A {
-  rankdir=LR;
-  edge [ style=dashed ];
-
-  // node [ fontname="Handlee" ];
-  subgraph cluster_frontend {
-    label="Your Laptop";
-    "local files" -> "staging area" -> "local repo" [dir=back];
-  }
-      
-  subgraph cluster_backend {
-    
-    label="The Internet (origin/remote)";
-    "online repo";
-  }
-
-  "local repo" -> "online repo" [dir=back];
-  
-}
-```
-
-<span style="font-size:0.5em;">Repo: repository</span>
-
-## The direction of version control: `push`
-
-```{dot}
-digraph B {
-  rankdir=LR;
-  edge [ style=dashed ];
-
-  // node [ fontname="Handlee" ];
-  subgraph cluster_frontend {
-    label="Your Laptop";
-    "local files" ->"staging area" -> "local repo";
-  }
-      
-  subgraph cluster_backend {
-    
-    label="The Internet (origin/remote)";
-    "online repo";
-  }
-
-  "local repo" -> "online repo";
-  
-}
-```
-
-<span style="font-size:0.5em;">Repo: repository</span>
-
-## An example repo using version control
-
-- FreeBird: a Julia package developed by Wexler Group
-<https://github.com/wexlergroup/FreeBird.jl>
-
-## Quiz time!
-
-1. What is `wexlergroup/FreeBird.jl`? A server? A project? A software?
-2. Where is `wexlergroup/FreeBird.jl` hosted?
-3. When was the last change made?
-4. Are there any issues with `FreeBird`, or it is just simply the perfection😁?
-5. How many branches are there?
-
-
-## Useful resources
-
-- Atlassian Git Tutorials <https://www.atlassian.com/git/tutorials>
-- Software Carpentry, Version Control with Git <https://swcarpentry.github.io/git-novice/>
-- Git documentation  <https://git-scm.com/docs>
-
-# Commands
-
-## Cloning an existing repository
-
-- `git clone`: copy, or "clone" a repo from a server
-```zsh
-git clone https://github.com/your_github_username/your_repo
-```
-\  
-
-I recommend creating a new repo on GitHub then clone it, instead of initiating a repo locally then push. See [Creating a new repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) page on GitHub.
-
-## Setting up a repository
-
-- `git init`: tell git to set up version control
-
-```zsh
-cd /path/to/your/existing/code 
-git init
-```
-Or, when outside a directory, use
-```zsh
-git init <project directory>
-```
-
-<span style="font-size:0.5em;"> - Directory: a "folder" equivalent in CLI</span>
-
-## Some configurations
-
-- `git config`
-
-Setting up for *every* repository on your computer  
-```zsh
-git config --global user.name "Mona Lisa"
-git config --global user.email "your_email@example.com"
-```
-
-Setting up for *a single* repository on your computer  
-```zsh
-git config user.name "Mona Lisa"
-git config user.email "your_email@example.com"
-```
-
-
-## To update a local repo
-
-- `git pull`: you *pull* the updates from the server
-```zsh
-git pull
-Already up to date.
-```  
-
-
-Always try `pull` before making any changes to stay up-to-date with the origin, and avoid *merge conflicts*.
-
-## Inspecting a repository
-
-- `git status`: check the status of the current repo
-```zsh
-git status
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   docs/index.html
-        modified:   index.qmd
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-
-## Start tracking
-
-- `git add`: to stage the changes
-```zsh
-git add <file_name>
-```
-several options:
-```zsh
-git add -A    # stage all changes: new, modified and deleted files
-git add .     # stage new and modified files
-git add -u    # stage modified and deleted files
-```
-
-## To stage the changes
-- `git commit`: to commit the changes staged with `git add`
-```zsh
-git commit -m "some text for the commit message"
-[main d7cf2e6] some text for the commit message
- 2 files changed, 18 insertions(+), 5 deletions(-)
-```
-
-
-## To upload with the server
-- `git push`: to `push` your changes to the `origin`
-```zsh
-git push
-
-Enumerating objects: 9, done.
-Counting objects: 100% (9/9), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 1002 bytes | 1002.00 KiB/s, done.
-Total 5 (delta 3), reused 0 (delta 0), pack-reused 0
-remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
-To https://github.com/yangmr04/git-recite-slides.git
-   5786288..efbbf37  main -> main
-```
-
-## Full example
-
-```zsh
-git pull
-Already up to date.
-
-git add hello.py
-
-git status
-On branch main
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-   new file: hello.py
-
-git commit -m "added hello.py"
-[main 2342a93] added hello.py
- 1 file changed, 1 insertion(+)
-
-git push
-```
-
-## Something unexpected: *merge conflict*
-Merge conflicts occur when competing changes are made to the same line of a file.^[[Resolving a merge conflict using the command line](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line)]
-It will block the `push` actions until the conflicts are resolved. A merge conflict looks like this:
-\  
-
-\  
-
-```zsh
-If you have questions, please
-<<<<<<< HEAD
-open an issue
-=======
-ask your question in IRC.
->>>>>>> branch-a
-```
-## Other concepts not covered here
-
-- Pull requests
-- Branches
-- Forks
 
 ## Take-home message
 - Version control is a powerful tool
