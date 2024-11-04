@@ -12,17 +12,113 @@
     What is RSE, and how does it fit in Chemistry
 
 
-## Motivation 
+## What is `FreeBird.jl`
 
-Problems in computational surface modeling:  
+- It's a computational package
+- It's developed by the Wexler Group
+- It does surface *free* energy calculations via *nested* sampling
+- It's written in [Julia](https://julialang.org/), a modern, high-level programming language
 
-   - No available tools
-   - Tools are not good
-   - Tools are too slow
 
-::: {style="text-align: center; margin-top: 1em"}
+## What is [Julia](https://julialang.org/)?
+
+<img align="left" src="https://julialang.org/assets/infra/logo.svg" height="80" style="padding-right: 20px;"/>  is a high-level, high-performance, dynamic programming language for technical computing. It's fast, easy to learn, and has a syntax that is familiar to users of other technical computing environments.
+
+- Version 1.0 was released in 2018
+- Developed by mathematician Alan Edelman *et al.* at MIT
+- It's designed for high-performance numerical analysis and computational science
+- It's free and open source
+
+## Nested sampling
+
+## `FreeBird.jl` design
+
+- It's modular
+- It's extensible
+- It's user-friendly
+- It's well-documented
+- It's open-source
+
+
+## `FreeBird.jl` functionality
+
+
+## Atomistic walkers
+
+```{julia}
+#| echo: true
+
+using FreeBird
+configs = generate_initial_configs(100, 10.0, 6)
+```
+
+```{julia}
+#| echo: true
+lj = LJParameters()
+```
+## Atomistic walkers
+
+```{julia}
+#| echo: true
+walkers = AtomWalker.(configs)
+```
+
+## Atomistic walkers
+```{julia}
+#| echo: true
+walkers[1]
+```
+## Atomistic walkers
+```{julia}
+#| echo: true
+walkers[1].configuration
+```
+
+## Construct the liveset
+
+```{julia}
+#| echo: true
+ls = LJAtomWalkers(walkers, lj)
+```
+
+## Run nested sampling
+
+```{julia}
+#| echo: true
+mc = MCRandomWalkClone()
+ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)
+n_iters = 10_000
+save = SaveEveryN(n_traj=10, n_snap=n_iters)
+```
+
+```{julia}
+#| echo: true
+if isfile("output_df.csv")
+run(`rm output_df.csv output.ls.extxyz output.traj.extxyz`) # delete previous output
+end
+energies, live, _ = nested_sampling_loop!(ls, ns_params, n_iters, mc, save)
+```
+
+## Nested sampling results
+
+```{julia}
+#| echo: true
+live.walkers[1].configuration
+```
+
+## Nested sampling results
+
+```{julia}
+using Plots
+plotly()
+plot(energies.iter[end-5000:end], energies.emax[end-5000:end], label="Energy")
+```
+
+
+
+<!-- ::: {style="text-align: center; margin-top: 1em"}
 [Journal of Open Source Software](https://joss.theoj.org/){preview-link="true" style="text-align: center"}
-:::
+::: -->
 
 ## Executable Code
 

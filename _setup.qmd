@@ -8,6 +8,7 @@ location: "PChem Group Meeting"
 jupyter: julia-1.11
 format: #revealjs
   revealjs:
+    # fontsize: 2em
     # theme: dark
     slides-url: https://samforeman.me/talks/llms-at-scale/slides.html
     template-partials:
