@@ -41,7 +41,7 @@
 
 ## `FreeBird.jl` design
 
-<img align="center" src="chart.png" height="80"/> 
+<img align="center" src="chart.png"/> 
 
 
 ## `FreeBird.jl` functionality
@@ -53,10 +53,15 @@
 
 ## Nested sampling
 
-```{=tex}
-\bar{\theta} = \dfrac{\int \theta L(\theta) \pi(\theta) d\theta }{\int L(\theta) \pi(\theta) d\theta }
-```
+Bayesian inference equation:
+$$\bar{\theta} = \frac{\int \theta L(\theta) \pi(\theta) d\theta }{\int L(\theta) \pi(\theta) d\theta }$$
 
+$\theta$ is the parameter of interest, $L(\theta)$ is the likelihood function, and $\pi(\theta)$ is the prior distribution.
+
+Now look at the partition function:
+$$ Z(\beta) = \int e^{-\beta \mathrm{H}(\mathrm{p}, \mathrm{X})}$$ d\mathrm{p} d\mathrm{X}
+
+<!-- Nested sampling is a method to calculate the partition function iteratively by sampling the phase space. -->
 
 ## Atomistic walkers
 
@@ -339,7 +344,7 @@ surf_ls = LJAtomWalkers(slabs, surf_lj)
 mc = MCRandomWalkClone()
 surf_ns_params = NestedSamplingParameters(500, 0.1, 0.01, 1e-5, 1.0, 0, 200)
 save = SaveEveryN(n_traj=10, n_snap=50_000)
-surf_energies, liveset, _ = nested_sampling_loop!(surf_ls, surf_ns_params, 50_000, mc, save)
+surf_energies, liveset, _ = nested_sampling_loop!(surf_ls, surf_ns_params, 10_000, mc, save)
 ```
 
 ## Surface results
@@ -442,7 +447,7 @@ ns_params = LatticeNestedSamplingParameters(1,1e-10,0,500_000)
 save = SaveEveryN(n_traj=10000, n_snap=500_000)
 
 # And finally, we can run the simulation
-lattice_energies, ls, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save; accept_same_config=true)
+lattice_energies, ls, _ = nested_sampling_loop!(ls, ns_params, 100_000, mc, save; accept_same_config=true)
 ```
 
 ## Lattice systems
@@ -459,15 +464,15 @@ Ts = collect(1:0.1:200)
 kb = 8.617333262e-5 # eV/K
 # Calculate the inverse temperatures
 β = 1 ./(kb.*Ts)
-# Define the degrees of freedom, which is 2×4 for the 4-particle system
-dof = 8
+# Define the degrees of freedom, which is 0 for lattice 
+dof = 0
 # Calculate the partition functions for each temperature
 Zs = [partition_function(b, ωi, Ei) for b in β]
 # Calculate the heat capacities as a function of temperature
 lattice_cvs = cv(lattice_energies, β, dof, 1000)
 ```
 
-## Lattice results
+## Lattice nested sampling results
 
 ```{julia}
 #| echo: false
@@ -475,6 +480,37 @@ lattice_cvs = cv(lattice_energies, β, dof, 1000)
 plot(Ts, lattice_cvs ./kb, xlabel="Temperature (K)", ylabel="Heat Capacity (Kb)", title="6-adsorbates Heat Capacity", label="lattice", legend=:topright)
 ```
 
+## Lastly, let's try exact enumeration
+
+```{julia}
+#| echo: true
+#| eval: true
+cutoff_radii = [1.1, 1.5]  # Angstrom
+
+energies, configurations, walkers = exact_enumeration(
+                          initial_lattice,
+                          cutoff_radii,
+                          h)
+
+                                # Define temperature range and corresponding beta values
+Ts = collect(1.0:0.1:200.0)  # Temperatures in K
+βs = 1.0 ./ (kb * Ts)  # 1/eV
+
+# Prepare energy values for Cv calculation
+ωis = ones(length(energies))
+Eis = [ustrip(energy) for energy in energies]
+dof = 0
+
+# Calculate Cv for each temperature
+Cv_values = [cv(β, ωis, Eis, dof) / kb for β in βs]  # Cv in units of kB
+```
+
+## Lastly, let's try exact enumeration
+
+```{julia}
+# Plot the heat capacity as a function of temperature
+plot(Ts, Cv_values, xlabel="Temperature (K)", ylabel="Heat Capacity (k_B)", label="Exact", title="Heat Capacity vs. Temperature")
+```
 ## What's next
 
 - Publish! There are some journals that are specifically designed for software papers
