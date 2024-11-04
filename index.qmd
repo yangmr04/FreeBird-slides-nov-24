@@ -39,6 +39,10 @@
 - It's well-documented
 - It's open-source
 
+## `FreeBird.jl` design
+
+<img align="center" src="chart.png" height="80"/> 
+
 
 ## `FreeBird.jl` functionality
 
@@ -49,6 +53,9 @@
 
 ## Nested sampling
 
+```{=tex}
+\bar{\theta} = \dfrac{\int \theta L(\theta) \pi(\theta) d\theta }{\int L(\theta) \pi(\theta) d\theta }
+```
 
 
 ## Atomistic walkers
@@ -91,13 +98,18 @@ ls = LJAtomWalkers(walkers, lj)
 
 ```{julia}
 #| echo: true
-#| eval: true
+#| eval: false
 mc = MCRandomWalkClone()
 ns_params = NestedSamplingParameters(200, 0.1, 0.01, 1e-5, 1.0, 0, 200)
 save = SaveEveryN(n_traj=10, n_snap=10_000)
 energies, liveset, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save)
 ```
-
+```{julia}
+#| output: none
+if isfile("output_df.csv")
+  run(`rm output_df.csv output.traj.extxyz`) # delete previous output
+end
+```
 
 
 
@@ -266,11 +278,11 @@ search: NestedSamplingParameters LatticeNestedSamplingParameters nested_sampling
 #| echo: true
 #| eval: true
 # Calculate the ω factors
-ωi = ωᵢ(energies.iter, 100)
+ωi = ωᵢ(energies.iter, 120)
 # Shift the energies to be greater than or equal to zero
 Ei = energies.emax .- minimum(energies.emax)
 # Specify the temperatures that we are interested in
-Ts = collect(1:0.1:10000)
+Ts = collect(1:0.1:1000)
 # Define the Boltzmann constant
 kb = 8.617333262e-5 # eV/K
 # Calculate the inverse temperatures
@@ -282,7 +294,7 @@ Zs = [partition_function(b, ωi, Ei) for b in β]
 # Calculate the internal energies for each temperature
 U = [internal_energy(b, ωi, Ei) for b in β]
 # Calculate the heat capacities as a function of temperature
-cvs = cv(energies, β, dof, 100)
+cvs = cv(energies, β, dof, 120)
 ```
 
 ## Finding surface phase transitions
@@ -290,17 +302,20 @@ cvs = cv(energies, β, dof, 100)
 ```{julia}
 #| echo: false
 #| eval: true
-plot(Ts, cvs./kb, label="FreeBird", xlabel="T(K)", ylabel="Heat Capacity (Kb)", title="6-particle Heat Capacity", legend=:topleft)
+plot(Ts, cvs./kb, label="FreeBird", xlabel="Temperature (K)", ylabel="Heat Capacity (Kb)", title="LJ6 Heat Capacity", legend=:topleft)
+```
+
+## Finding surface phase transitions
+
+```{julia}
+#| echo: false
+#| eval: true
+plot(Ts, U, label="FreeBird", xlabel="Temperature (K)", ylabel="U (eV)", title="LJ6 Internal Energy", legend=:topleft)
 ```
 
 ## Surface stuff
 
-```{julia}
-#| output: none
-if isfile("output_df.csv")
-  run(`rm output_df.csv output.traj.extxyz`) # delete previous output
-end
-```
+
 
 ```{julia}
 #| echo: true
@@ -316,26 +331,149 @@ slabs[1].configuration
 ```
 
 ## Surface stuff
-<!-- ```{julia}
+```{julia}
 #| echo: true
-#| eval: false
+#| eval: true
 surf_lj = LJParameters(epsilon=0.1, sigma=2.5, cutoff=4.0)
 surf_ls = LJAtomWalkers(slabs, surf_lj)
 mc = MCRandomWalkClone()
 surf_ns_params = NestedSamplingParameters(500, 0.1, 0.01, 1e-5, 1.0, 0, 200)
-save = SaveEveryN(n_traj=10, n_snap=20_000)
+save = SaveEveryN(n_traj=10, n_snap=50_000)
 surf_energies, liveset, _ = nested_sampling_loop!(surf_ls, surf_ns_params, 50_000, mc, save)
-``` -->
+```
 
 ## Surface results
 
-<!-- ```{julia}
+```{julia}
+#| echo: true
+#| eval: true
+surf_ls.walkers[1].configuration
+```
+
+## Surface results
+
+```{julia}
+#| echo: true
+#| eval: true
+plot(surf_energies.iter[1000:end], surf_energies.emax[1000:end], ylabel="Energy", xlabel="Iteration", label="")
+```
+
+
+## Surface results
+
+```{julia}
+#| echo: true
+#| eval: true
+# Calculate the ω factors
+ωi = ωᵢ(surf_energies.iter, 480)
+# Shift the energies to be greater than or equal to zero
+Ei = surf_energies.emax .- minimum(surf_energies.emax)
+# Specify the temperatures that we are interested in
+Ts = collect(1:0.1:1000)
+# Define the Boltzmann constant
+kb = 8.617333262e-5 # eV/K
+# Calculate the inverse temperatures
+β = 1 ./(kb.*Ts)
+# Define the degrees of freedom, which is 3×6 for the 6-particle system
+dof = 18
+# Calculate the partition functions for each temperature
+Zs = [partition_function(b, ωi, Ei) for b in β]
+# Calculate the heat capacities as a function of temperature
+surf_cvs = cv(surf_energies, β, dof, 480)
+```
+
+## Surface results
+
+```{julia}
+#| echo: false
+#| eval: true
+plot(Ts, surf_cvs./kb, label="FreeBird", xlabel="Temperature (K)", ylabel="Heat Capacity (Kb)", title="6-adsorbates Heat Capacity", legend=:topleft)
+```
+
+## Lattice systems
+
+```{julia}
+#| echo: true
+#| eval: true
+using Distributions, DataFrames
+
+square_supercell_dimensions = (4, 4, 1)
+square_basis=[(0.0, 0.0, 0.0)]
+
+adsorption_energy = -0.04
+nn_energy = -0.01
+nnn_energy = -0.0025
+
+# Initialize the lattice
+occupied_sites = sample(1:16, 6, replace=false)
+
+initial_lattice = LatticeSystem{SquareLattice}(;
+           supercell_dimensions = square_supercell_dimensions,
+           occupations=occupied_sites)
+
+h = GenericLatticeHamiltonian(adsorption_energy, [nn_energy, nnn_energy], u"eV")
+```
+
+## Lattice systems
+
+```{julia}
 #| echo: true
 #| eval: false
-surf_ls.walkers[1].configuration
-``` -->
+walkers = [deepcopy(initial_lattice) for i in 1:2000]
 
+for walker in walkers
+    walker.occupations = [false for i in 1:length(walker.occupations)]
+    for i in sample(1:length(walker.occupations), 6, replace=false)
+        walker.occupations[i] = true
+    end
+end
 
+unique!(x -> x.occupations, walkers) # remove duplicates
+
+# Now, we can create the liveset by combining the walkers and the potential
+ls = LatticeGasWalkers(deepcopy(LatticeWalker.(walkers[1:1000])), h, perturb_energy=1e-10)
+# We can now create a Monte Carlo object
+mc = MCNewSample()
+# Let's specify the nested sampling parameters: 
+# Monte Carlo steps, energy perturbation, current fail count, allowed fail count
+# Use `?LatticeNestedSamplingParameters` to see the documentation for more information
+ns_params = LatticeNestedSamplingParameters(1,1e-10,0,500_000)
+# We can also create a save object, using default value for most parameters except `n_snap` for saving snapshots
+save = SaveEveryN(n_traj=10000, n_snap=500_000)
+
+# And finally, we can run the simulation
+lattice_energies, ls, _ = nested_sampling_loop!(ls, ns_params, 10_000, mc, save; accept_same_config=true)
+```
+
+## Lattice systems
+
+```{julia}
+#| echo: true
+#| eval: true
+ωi = ωᵢ(lattice_energies.iter, 1000)
+# Shift the energies to be greater than or equal to zero
+Ei = lattice_energies.emax .- minimum(lattice_energies.emax)
+# Specify the temperatures that we are interested in
+Ts = collect(1:0.1:200)
+# Define the Boltzmann constant
+kb = 8.617333262e-5 # eV/K
+# Calculate the inverse temperatures
+β = 1 ./(kb.*Ts)
+# Define the degrees of freedom, which is 2×4 for the 4-particle system
+dof = 8
+# Calculate the partition functions for each temperature
+Zs = [partition_function(b, ωi, Ei) for b in β]
+# Calculate the heat capacities as a function of temperature
+lattice_cvs = cv(lattice_energies, β, dof, 1000)
+```
+
+## Lattice results
+
+```{julia}
+#| echo: false
+#| eval: true
+plot(Ts, lattice_cvs ./kb, xlabel="Temperature (K)", ylabel="Heat Capacity (Kb)", title="6-adsorbates Heat Capacity", label="lattice", legend=:topright)
+```
 
 ## What's next
 
@@ -352,10 +490,7 @@ Or, traditional journals like:
 :::
 
 
-## Take-home message
-- Version control is a powerful tool
-- It's a good practice for code development
-- It's essential for collaborative projects
-- It has great importance in scientific reproducibility
-
-Start using it, now!
+## Take-home messages
+- Good research software engineering practices are essential for reproducibility and sustainability
+- We are moving away from traditional monolithic software packages to modular, extensible, and user-friendly packages
+- Software engineering is a skill that can be learned and improved upon, and it's a valuable skill to have in the scientific community, as well as in industry
